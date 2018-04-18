@@ -8,12 +8,12 @@ This storyboard focuses on a student, called Jessica that wants to find a place 
 ![5th panel](https://github.com/COGS-121/project/blob/master/Image2/5.jpg)
 ![6th panel](https://github.com/COGS-121/project/blob/master/Image2/6.jpg)
 
-Storyboard 2
+<h1>Storyboard 2</h1>
 
 This storyboard involves a businessman who is active as he loves to explore new places. 
 ![Storyboard 2](https://github.com/COGS-121/project/blob/master/Image2/storyboardtwo.jpeg)
 
-Paper Prototype 1
+<h1>Paper Prototype 1</h1>
 
 This prototype makes it easy to find different locations on the UCSD campus by using the Trending emojis to filter
 different types of locations. It is also easy to mark your location by tapping on the map.
@@ -25,7 +25,7 @@ different types of locations. It is also easy to mark your location by tapping o
 ![6th](https://github.com/COGS-121/project/blob/master/Image2/12.jpg)
 ![7th](https://github.com/COGS-121/project/blob/master/Image2/13.jpg)
 
-Paper Prototype 2
+<h1>Paper Prototype 2</h1>
 
 This prototype makes it simple to mark down your current location. After you are able to add hashtags to the mark
 you made on the map.
