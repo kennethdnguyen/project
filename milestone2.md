@@ -27,8 +27,7 @@ different types of locations. It is also easy to mark your location by tapping o
 
 <h1>Paper Prototype 2</h1>
 
-This prototype makes it simple to mark down your current location. After you are able to add hashtags to the mark
-you made on the map.
+This prototype makes it simple to mark down your current location. After you are able to add hashtags to the mark you made on the map.
 ![1](https://github.com/COGS-121/project/blob/master/Image2/A.jpg)
 ![2](https://github.com/COGS-121/project/blob/master/Image2/B.jpg)
 ![3](https://github.com/COGS-121/project/blob/master/Image2/C.jpg)
