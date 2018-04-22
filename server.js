@@ -20,6 +20,7 @@ const fakeDatabase = {
 //  {
 //    "name": 'Study': {locations: 'Biomedical Library, Geisel Library'}
 //  }
+//];
 
 
 function myFunction(arr)
