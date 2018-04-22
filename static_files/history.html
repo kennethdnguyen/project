@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,
+  initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>history</title>
+
+  <script src="jquery-3.3.1.min.js"></script>
+
+  <script type="text/javascript">
+  // jQuery convention for running when the document has been fully loaded:
+$(document).ready(() => {
+  $('#locationButton').click(() => {
+    const requestURL = 'users/' + $('#hashtagBox').val();
+    console.log('making ajax request to:', requestURL);
+
+    $.ajax({
+       // all URLs are relative to http://localhost:3000/
+       url: requestURL,
+       type: 'GET',
+       dataType : 'json', // this URL returns data in JSON format
+       success: (data) => {
+         console.log('You received some data!', data);
+         if (data.locations) {
+           $('#status').html('Successfully fetched data at URL: ' + requestURL);
+           $('#locationDiv').html(data.locations);
+         } else {
+           $('#status').html('Error: could not find user at URL: ' + requestURL);
+           // clear the display
+           $('#locationDiv').html('');
+         }
+       },
+     });
+   });
+
+   $(document).ajaxError(() => {
+      $('#status').html('Error: unknown ajaxError!');
+    });
+  });
+
+  </script>
+
+  <style>
+    #top{
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+    h1{
+      text-align: center;
+    }
+    #search{
+		  text-align : center;
+    }
+    #history_button{
+      position: absolute;
+      right: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="top">
+    <h1>App Name</h1>
+    <a href = "history.html">
+        <button id="history_button">Emoji Map</button>
+    </a>
+  </div>
+  <div class="search-container" id="search">
+      <input type="text" id="hashtagBox" placeholder="Search.." name="search"  align="center">
+      <button type="submit" id="locationButton"><i class="fa fa-search"></i></button>
+  </div>
+
+  <div id="locationDiv"></div>
+</body>
+</html>
