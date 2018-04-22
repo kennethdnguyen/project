@@ -1,32 +1,13 @@
-
-/**
- * Module dependencies.
- */
 const express = require('express');
 const app = express();
 
 app.use(express.static('static_files'));
 
-
-/*-------------------------------The code we need to modify----------
-//fackdatabase that to be edit later
 const fakeDatabase = {
-  'Philip': {job: 'professor', pet: 'cat.jpg'},
-  'John': {job: 'student',   pet: 'dog.jpg'},
-  'Carol': {job: 'engineer',  pet: 'bear.jpg'}
+  'Chill': {locations: 'Library Walk, Sun God Lawn, Revelle Fountain'},
+  'Food': {locations: 'Taco Villa, 64 North'},
+  'Study': {locations: 'Biomedical Library, Geisel Library'}
 };
-// Example route
-// var user = require('./routes/user');
-// GET a list of all usernames
-//
-// To test, open this URL in your browser:
-//   http://localhost:3000/users
-app.get('/users', (req, res) => {
-  const allUsernames = Object.keys(fakeDatabase); // returns a list of object keys
-  console.log('allUsernames is:', allUsernames);
-  res.send(allUsernames);
-});
-
 
 // GET profile data for a user
 //
@@ -34,7 +15,6 @@ app.get('/users', (req, res) => {
 //   http://localhost:3000/users/Philip
 //   http://localhost:3000/users/Carol
 //   http://localhost:3000/users/invalidusername
-//app.get('/', index.view);
 app.get('/users/:userid', (req, res) => {
   const nameToLookup = req.params.userid; // matches ':userid' above
   const val = fakeDatabase[nameToLookup];
@@ -45,7 +25,6 @@ app.get('/users/:userid', (req, res) => {
     res.send({}); // failed, so return an empty object instead of undefined
   }
 });
------------------------------------------------------------*/
 
 // start the server at URL: http://localhost:3000/
 app.listen(3000, () => {
