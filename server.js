@@ -9,12 +9,31 @@ const fakeDatabase = {
   'Study': {locations: 'Biomedical Library, Geisel Library'}
 };
 
-// GET profile data for a user
-//
-// To test, open these URLs in your browser:
-//   http://localhost:3000/users/Philip
-//   http://localhost:3000/users/Carol
-//   http://localhost:3000/users/invalidusername
+
+//const fakeDatabase2 = [
+//  {
+//    "name": 'Chill': {locations: 'Library Walk, Sun God Lawn, Revelle Fountain'}
+//  },
+//  {
+//    "name": 'Food': {locations: 'Taco Villa, 64 North'}
+//  },
+//  {
+//    "name": 'Study': {locations: 'Biomedical Library, Geisel Library'}
+//  }
+
+
+function myFunction(arr)
+{
+  var out = "";
+  var i;
+  for (i=0; i <arr.length; i++) {
+    out = arr[i].display;
+  }
+  document.getElementById("id01").innerHTML = out;
+}
+
+
+
 app.get('/users/:userid', (req, res) => {
   const nameToLookup = req.params.userid; // matches ':userid' above
   const val = fakeDatabase[nameToLookup];

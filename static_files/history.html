@@ -8,7 +8,6 @@
   <title>history</title>
 
   <script src="jquery-3.3.1.min.js"></script>
-
   <script type="text/javascript">
   // jQuery convention for running when the document has been fully loaded:
 $(document).ready(() => {
@@ -73,6 +72,34 @@ $(document).ready(() => {
       <button type="submit" id="locationButton"><i class="fa fa-search"></i></button>
   </div>
 
+
   <div id="locationDiv"></div>
+
+
+  <div id="displayHistory" class="container">
+    <div class="hashtag">Hashtag Here</div>
+    <div class="locations">Locations Here</div>
+</div>
+
+<div id="id01"></div>
+<script>
+    function myFunction(arr)
+    {
+      var out = "";
+      var i;
+      for (i=0; i <arr.length; i++) {
+        out += arr[i].name;
+      }
+      document.getElementById("id01").innerHTML = out;
+    }
+</script>
+
+<script src="myTutorials.js"></script>
+
+
+
+
+
+
 </body>
 </html>
