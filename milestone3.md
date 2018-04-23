@@ -15,3 +15,4 @@ Our first screen, our home page is different than the first screen in our paper 
 
 
 ![Page1](https://raw.githubusercontent.com/COGS-121/project/master/screen%20shots%20for%20Milestone3/Page1.JPG)
+![Page1](https://raw.githubusercontent.com/COGS-121/project/master/screen%20shots%20for%20Milestone3/Page2.JPG)
