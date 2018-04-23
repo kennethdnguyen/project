@@ -1,0 +1,14 @@
+{
+  "name": "HCI120",
+  "version": "1.0.0",
+  "author": "",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
