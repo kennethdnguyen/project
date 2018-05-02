@@ -1,114 +1,73 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,
   initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <title>history</title>
-
-  <script src="jquery-3.3.1.min.js"></script>
-  <script type="text/javascript">
-  // jQuery convention for running when the document has been fully loaded:
-$(document).ready(() => {
-
-  $.get( "/Chill", function(data) {
-  $("#hashtag").html(data.name);
-  $("#locations").html(data.locations);
-});
-
-  $.get( "/Food", function(data) {
-  $("#hashtag2").html(data.name);
-  $("#locations2").html(data.locations);
-});
-
-  $.get( "/Study", function(data) {
-  $("#hashtag3").html(data.name);
-  $("#locations3").html(data.locations);
-});
-
-
-  $('#locationButton').click(() => {
-    const requestURL = $('#hashtagBox').val();
-    console.log('making ajax request to:', requestURL);
-
-    $.ajax({
-       // all URLs are relative to http://localhost:3000/
-       url: requestURL,
-       type: 'GET',
-       dataType : 'json', // this URL returns data in JSON format
-       success: (data) => {
-        $('#locationDiv').html(data.locations);
-         console.log('You received some data!', data);
-         if (data.locations) {
-           $('#status').html('Successfully fetched data at URL: ' + requestURL);
-           $('#locationDiv').html(data.locations);
-         } else {
-           $('#status').html('Error: could not find user at URL: ' + requestURL);
-           // clear the display
-           $('#locationDiv').html('');
-         }
-       },
-     });
-   });
-
-   $(document).ajaxError(() => {
-      $('#status').html('Error: unknown ajaxError!');
-    });
-  });
-
-  </script>
-
- 
+  <title>Google Street View Searcher</title>
+    <script src="jquery-3.3.1.min.js"></script>
   <style>
-    #top{
-      display: flex;
-      justify-content: center;
-      position: relative;
-    }
-    h1{
-      text-align: center;
-    }
-    #search{
-		  text-align : center;
-    }
-    #history_button{
+	body{background-color: aliceblue;}
+	      .history{
       position: absolute;
       right: 0;
     }
-  </style>
+  .photo {
+  margin-left: auto;
+  margin-right: auto;
+	border:0;
+	  height: 300px;
+      width: 100%;  
+}
+
+.address {
+color: black;
+text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
+text-align: center;
+}
+	  .form-container{
+		  text-align: center;
+	  }
+</style>
+
+
+
 </head>
-
 <body>
-  <div id="top">
-    <h1><a href="index.html">App Name</a></h1>
-    <a href = "index.html">
-        <button id="history_button">Emoji Map</button>
+	<a href = "index.html">
+    <button class="history">Home</button>
     </a>
-  </div>
-  <div class="search-container" id="search">
-      <input type="text" id="hashtagBox" placeholder="Search.." name="search"  align="center">
-      <button type="submit" id="locationButton"><i class="fa fa-search"></i></button>
-  </div>
+	
+		<h1 align="center">Street View</h1>
+ 
+    <form id="form-container" class="form-container">
+      <label for="street">Street: </label><input type="text" id="street" value="">
+      <label for="city"> <br /> City: </label><input type="text" id="city" value="">
+      <button id="submit">Submit</button>
+    </form>
 
+    <hr>
+    <h2 id="address" class="address">Enter Address Above</h2>
+	
+	<img class="photo" id="photo">
+	
+ <script type="text/javascript">
+  	function loadData() {
+  	var $address = $("#address");
+  	var street = $("#street").val();
+  	var city = $("#city").val();
+	var address = street + ", " + city; 
+  	$address.text("Address: " + address + "");
 
-  <div id="locationDiv"></div>
+  	var streetViewURL = "http://maps.googleapis.com/maps/api/streetview?size=600x400&location=" + address + "&fov=90&heading=235&pitch=10&key=AIzaSyCuWPQx166d5TWWlsz3kCCvhhIvRPe3EnM";
+//var streetViewURL = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=40.720032,-73.988354&fov=90&heading=235&pitch=10&key=AIzaSyCuWPQx166d5TWWlsz3kCCvhhIvRPe3EnM"
+	$('#photo').attr("src", streetViewURL);
+  	return false;
 
-<br>
-  <div id="displayHistory" class="container">
-    <div id="hashtag">Hashtag Here</div>
-    <div id="locations">Locations Here</div>
-<br>
-    <div id="hashtag2">Hashtag Here</div>
-    <div id="locations2">Locations Here</div>
-<br>
-    <div id="hashtag3">Hashtag Here</div>
-    <div id="locations3">Locations Here</div>
+  };
+ 
+	$("#form-container").submit(loadData);
+</script>
 
-</div>
-
-
-
-
-</body>
-</html>
+  </body>
+  </html>

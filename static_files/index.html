@@ -1,18 +1,18 @@
 <!DOCTYPE html>
+
 <html>
-  <head>
-    <style>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,
+  initial-scale=1.0">
+  <title>Cogs 121 Project</title>
+
+  <style>
 	#map {
-      height: 500px;
+      height: 450px;
       width: 100%;
     }
-    #Trending_Section ul{
-      margin: 0px;
-      padding: 0px;
-    }
-    #Trending_Section ul li {
-      display: inline;
-    }
+	
     #top{
       display: flex;
       justify-content: center;
@@ -21,30 +21,71 @@
     h1{
       text-align: center;
     }
-    h3{
-      text-align: center;
-    }
-    ul{
-      text-align: center;
-    }
-    button{
+	  #short{
+		  text-align: center;
+	  }
+    .history{
       position: absolute;
       right: 0;
     }
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
 
+}
+
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #4CAF50;
+}
+
+.dropdown {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	padding-top: 10px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+        bottom: 100%; /* added this attribute */
+
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+.dropdown a:hover {background-color: #ddd}
+
+.show {display:block;}
     </style>
-  </head>
-  <body>
-	  <div id="top">
-    <h1>Home Page</h1>
+</head>
+<body>
+	 <div id="top">
+    <h1>Map It Up</h1>
     <a href = "history.html">
-        <button>History</button>
+    <button class="history">Street View</button>
     </a>
   </div>
+	<p id="short">Discover New Hot Spots</p>
+
+
     <div id="map"></div>
 
-    <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
-    <script>
+<script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+<script>
       /**
       * Reference to Firebase database.
       * @const
@@ -112,7 +153,7 @@
           disableDoubleClickZoom: true,
           streetViewControl: false,
         });
-		  
+
         // Create the DIV to hold the control and call the makeInfoBox() constructor
         // passing in this DIV.
         var infoBoxDiv = document.createElement('div');
@@ -226,18 +267,42 @@
         });
       }
     </script>
-	   <div id="Trending_Section"> <!-- Trending box -->
-      <h3>Trending</h3>
-        <ul>
-          <li><a href="#">Chill</a></li>
-          <li><a href="#">Food</a></li>
-          <li><a href="#">Study</a></li>
-          <li><a href="#">Group</a></li>
-          <li><a href="#">Sleep</a></li>
-        </ul>
-    </div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqsnk4ZFV7jtlCZ-l161iBo7BpQFJueA8&libraries=visualization&callback=initMap" async defer></script>
-	  
-	  
-  </body>
+
+	<div class="dropdown" id="Trending_Section">
+    <br>
+	<button onclick="myFunction()" class="dropbtn">Trending</button>
+  		<div id="myDropdown" class="dropdown-content">
+    		<a href="#">#Chill</a>
+   			 <a href="#">#Study</a>
+   		 	<a href="#">#Group</a>
+			<a href="#">#Alone</a>
+  		</div>
+	</div>
+	<script>
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqsnk4ZFV7jtlCZ-l161iBo7BpQFJueA8&libraries=visualization&callback=initMap" async defer></script>
+
+
+</body>
 </html>
