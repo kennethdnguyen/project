@@ -76,14 +76,13 @@
 	 <div id="top">
     <h1>Map It Up</h1>
     <a href = "history.html">
-    <button class="history">Street View and History</button>
+    <button class="history">Street View</button>
     </a>
   </div>
 	<p id="short">Discover New Hot Spots</p>
 
 
     <div id="map"></div>
-    <div id="work"></div>
 
 <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
 <script>
@@ -103,20 +102,7 @@
         timestamp: null,
         lat: null,
         lng: null
-
-        // picture: null
-
-
-
-        ///
-        ///
-        //      // MODIFY THIS TO ADD A DATAFIELD TO SAVE PICTURE OF EMOJI IN FIREBASE
-        /////
-        ///
-
       };
-
-   
 
       function makeInfoBox(controlDiv, map) {
         // Set CSS for the control border.
@@ -156,15 +142,6 @@
         }, {remember: 'sessionOnly'});  // Users will get a new id for every session.
       }
 
-
-
-
-      var bookFlag = false;
-      var burgerFlag = false;
-      var emoji_to_use;
-
-      
-
       /**
        * Creates a map object with a click listener and a heatmap.
        */
@@ -177,20 +154,16 @@
           streetViewControl: false,
         });
 
-
-    // Create the DIV to hold the control and call the makeInfoBox() constructor
+        // Create the DIV to hold the control and call the makeInfoBox() constructor
         // passing in this DIV.
         var infoBoxDiv = document.createElement('div');
         makeInfoBox(infoBoxDiv, map);
         map.controls[google.maps.ControlPosition.TOP_CENTER].push(infoBoxDiv);
 
-
         // Listen for clicks and add the location of the click to firebase.
         map.addListener('click', function(e) {
-          placeMarker(e.latLng, map);
           data.lat = e.latLng.lat();
           data.lng = e.latLng.lng();
-          // data.picture = emoji_to_use;
           addToFirebase(data);
         });
 
@@ -202,16 +175,6 @@
         });
 
         initAuthentication(initFirebase.bind(undefined, heatmap));
-      }
-
-      function placeMarker(latLng, map) {        
-     
-        console.log(emoji_to_use);
-        var marker = new google.maps.Marker({
-          position: latLng,
-          map: map,
-          icon: emoji_to_use
-        });
       }
 
       /**
@@ -290,7 +253,7 @@
       /**
        * Adds a click to firebase.
        * @param {Object} data The data to be added to firebase.
-       *     It contains the lat, lng, sender, and the emoji selected and timestamp.
+       *     It contains the lat, lng, sender and timestamp.
        */
       function addToFirebase(data) {
         getTimestamp(function(timestamp) {
@@ -302,22 +265,6 @@
             }
           });
         });
-      }
-
-
-      function markBookEmoji() {
-        console.log("Book Emoji was clicked on");
-        bookFlag = true;
-        burgerFlag = false;
-        emoji_to_use = 'book.png';
-
-      }
-
-      function markBurgerEmoji() {
-        console.log("Burger Emoji was clicked on");
-        burgerFlag = true;
-        bookFlag = false;
-        emoji_to_use = 'burger.png';
       }
     </script>
 
@@ -331,16 +278,6 @@
 			<a href="#">#Alone</a>
   		</div>
 	</div>
-
-  <div class="bookEmoji" id="bookEmoji">
-    <img onclick="markBookEmoji()" src="book.png" />
-  </div>
-
-  <div class="burgerEmoji" id="burgerEmoji">
-    <img onclick="markBurgerEmoji()" src="burger.png" />
-  </div>
-
-
 	<script>
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
