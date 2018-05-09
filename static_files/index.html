@@ -95,6 +95,8 @@
       var firebase = new Firebase('https://cogs121-4b110.firebaseio.com');
       // var firebase = new Firebase('https://fire-map-tutorial.firebaseio.com/');
 
+
+
       /**
       * Data object to be written to Firebase.
       */
@@ -102,21 +104,10 @@
         sender: null,
         timestamp: null,
         lat: null,
-        lng: null
-
-        // picture: null
-
-
-
-        ///
-        ///
-        //      // MODIFY THIS TO ADD A DATAFIELD TO SAVE PICTURE OF EMOJI IN FIREBASE
-        /////
-        ///
-
+        lng: null,
+        picture: null
       };
 
-   
 
       function makeInfoBox(controlDiv, map) {
         // Set CSS for the control border.
@@ -162,6 +153,7 @@
       var bookFlag = false;
       var burgerFlag = false;
       var emoji_to_use;
+      var map;
 
       
 
@@ -169,13 +161,14 @@
        * Creates a map object with a click listener and a heatmap.
        */
       function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
+        map = new google.maps.Map(document.getElementById('map'), {
           center: {lat:32.8777, lng:-117.2372},
           zoom:  15,
 
           disableDoubleClickZoom: true,
           streetViewControl: false,
         });
+
 
 
     // Create the DIV to hold the control and call the makeInfoBox() constructor
@@ -190,7 +183,7 @@
           placeMarker(e.latLng, map);
           data.lat = e.latLng.lat();
           data.lng = e.latLng.lng();
-          // data.picture = emoji_to_use;
+          data.picture = emoji_to_use;
           addToFirebase(data);
         });
 
@@ -305,6 +298,7 @@
       }
 
 
+
       function markBookEmoji() {
         console.log("Book Emoji was clicked on");
         bookFlag = true;
@@ -319,6 +313,67 @@
         bookFlag = false;
         emoji_to_use = 'burger.png';
       }
+	function markRunningEmoji() {
+        console.log("Book Emoji was clicked on");
+        bookFlag = true;
+        burgerFlag = false;
+        emoji_to_use = 'running.png';
+
+      }
+	function markGymEmoji() {
+        console.log("Book Emoji was clicked on");
+        bookFlag = true;
+        burgerFlag = false;
+        emoji_to_use = 'gym.png';
+
+      }
+	function markSleepEmoji() {
+        console.log("Book Emoji was clicked on");
+        bookFlag = true;
+        burgerFlag = false;
+        emoji_to_use = 'sleep.png';
+
+      }
+	function markMusicEmoji() {
+        console.log("Book Emoji was clicked on");
+        bookFlag = true;
+        burgerFlag = false;
+        emoji_to_use = 'music.png';
+
+      }
+	var working = firebase.child('clicks');
+      working.on('value', gotData, errData);
+
+
+  function gotData(data) {
+    var latitude;
+    var longitude;
+    var emoji;
+
+    var clickData = data.val();
+    var keys = Object.keys(clickData);
+
+   for (var i = 0; i < keys.length; i++) {
+      var k = keys[i];
+      latitude = clickData[k].lat;
+      longitude = clickData[k].lng;
+      emoji = clickData[k].picture;
+      //console.log(latitude, longitude);
+      var location_to_mark = new google.maps.LatLng(latitude,longitude);
+      var marker = new google.maps.Marker({
+        position: location_to_mark,
+        map: map,
+        icon: emoji
+      });
+
+    }
+
+  }
+
+  function errData(err) {
+    console.log('Error!');
+    console.log(err);
+  }
     </script>
 
 	<div class="dropdown" id="Trending_Section">
@@ -334,10 +389,11 @@
 
   <div class="bookEmoji" id="bookEmoji">
     <img onclick="markBookEmoji()" src="book.png" />
-  </div>
-
-  <div class="burgerEmoji" id="burgerEmoji">
     <img onclick="markBurgerEmoji()" src="burger.png" />
+	<img onclick="markRunningEmoji()" src="running.png" />
+	<img onclick="markGymEmoji()" src="gym.png" />
+	<img onclick="markMusicEmoji()" src="music.png" />
+	<img onclick="markSleepEmoji()" src="sleep.png" />
   </div>
 
 
