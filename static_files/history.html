@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width,
   initial-scale=1.0">
   <title>Google Street View Searcher</title>
-    <script src="jquery-3.3.1.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+  <script src="jquery-3.3.1.min.js"></script>
   <style>
 	body{background-color: aliceblue;}
 	      .history{
@@ -25,9 +26,18 @@ color: black;
 text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
 text-align: center;
 }
-	  .form-container{
+.form-container{
 		  text-align: center;
 	  }
+
+#historybutton {
+  text-align: center;
+  padding-top: 25px;
+}
+
+#test {
+  text-align: center;
+}
 </style>
 
 
@@ -46,12 +56,58 @@ text-align: center;
       <button id="submit">Submit</button>
     </form>
 
+  <div id="historybutton">
+    <button onclick="myFunction()">Display Last Saved Location</button>
+  </div>
+    <div id="test"></div>
     <hr>
     <h2 id="address" class="address">Enter Address Above</h2>
 	
 	<img class="photo" id="photo">
 	
  <script type="text/javascript">
+ var lat;
+ var lng;
+   var config = {
+    apiKey: "AIzaSyCqsnk4ZFV7jtlCZ-l161iBo7BpQFJueA8",
+    authDomain: "cogs121-4b110.firebaseapp.com",
+    databaseURL: "https://cogs121-4b110.firebaseio.com",
+    projectId: "cogs121-4b110",
+    storageBucket: "cogs121-4b110.appspot.com",
+    messagingSenderId: "398783944630"
+  };
+  firebase.initializeApp(config);
+  var database;
+  database = firebase.database();
+
+  var ref = database.ref('clicks');
+  ref.on('value', gotData, errData);
+
+  function gotData(data) {
+    var clickData = data.val();
+    var keys = Object.keys(clickData);
+
+    var lastClick = keys.length - 1;
+
+    var k = keys[lastClick];
+    lat = clickData[k].lat;
+    lng = clickData[k].lng;
+    console.log(lat, lng);
+  }
+
+  function errData(err) {
+    console.log('Error!');
+    console.log(err);
+  }
+
+function myFunction() {
+  $('#test').html('Latitude: ' + lat + ' ' + 'Longitude: ' + lng);
+
+      var a = [ '\u{1F96A}' ];
+      console.log(a[0]);
+      $('#test').html(a[0]);
+
+}
   	function loadData() {
   	var $address = $("#address");
   	var street = $("#street").val();
@@ -68,6 +124,10 @@ text-align: center;
  
 	$("#form-container").submit(loadData);
 </script>
+
+
+
+
 
   </body>
   </html>
