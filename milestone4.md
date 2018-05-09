@@ -1,2 +1,6 @@
+In regards to User privacy, we’re using a credited database, known as Firebase, developed by Google officials. Our app only stores the location the user wishes to share with others, compared to storing private information such as one’s name, age or address. Simply put, we’re just collecting simple interactions and displaying the factors on the screen. Furthermore, our street view displays public data, without compromising private location. 
+
+Compared to our last milestone, the user interface for our second page, has improved as we now display an image of a certain location. We also have two texts at the top of the screen that make it easy for one to search an area of interest. On the home page, we now have a heat map that displays popular areas based on user taps/clicks. For right now we decided to have the “trending” button hide sub categories, which allowed us to display a greater portion of the map. This method draws the user to further interact with the map, and not be distracted by other details.
+
 ![page1](https://github.com/COGS-121/project/blob/master/milestone4%20jpg/page1.JPG?raw=true)
 ![page2](https://github.com/COGS-121/project/blob/master/milestone4%20jpg/page2.JPG?raw=true)
