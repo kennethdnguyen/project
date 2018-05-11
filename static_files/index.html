@@ -2,90 +2,81 @@
 
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,
   initial-scale=1.0">
-  <title>Cogs 121 Project</title>
-
-  <style>
-	#map {
-      height: 450px;
-      width: 100%;
-    }
-	
-    #top{
-      display: flex;
-      justify-content: center;
-      position: relative;
-    }
-    h1{
-      text-align: center;
-    }
-	  #short{
-		  text-align: center;
-	  }
-    .history{
-      position: absolute;
-      right: 0;
-    }
+<title>Cogs 121 Project</title>
+<style>
+#map {
+	height: 450px;
+	width: 100%;
+}
+#top {
+	display: flex;
+	justify-content: center;
+	position: relative;
+}
+h1 {
+	text-align: center;
+}
+#short {
+	text-align: center;
+}
+.history {
+	position: absolute;
+	right: 0;
+}
 .dropbtn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-
+	background-color: #4CAF50;
+	color: white;
+	padding: 16px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
 }
-
 .dropbtn:hover, .dropbtn:focus {
-    background-color: #4CAF50;
+	background-color: #4CAF50;
 }
-
 .dropdown {
 	position: relative;
 	display: flex;
 	justify-content: center;
 	padding-top: 10px;
 }
-
 .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    overflow: auto;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-        bottom: 100%; /* added this attribute */
-
+	display: none;
+	position: absolute;
+	background-color: #f1f1f1;
+	min-width: 160px;
+	overflow: auto;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+	bottom: 100%; /* added this attribute */
 }
-
 .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
 }
-.dropdown a:hover {background-color: #ddd}
-
-.show {display:block;}
-    </style>
+.dropdown a:hover {
+	background-color: #ddd
+}
+.show {
+	display: block;
+}
+</style>
 </head>
 <body>
-	 <div id="top">
-    <h1>Map It Up</h1>
-    <a href = "history.html">
-    <button class="history">Street View and History</button>
-    </a>
-  </div>
-	<p id="short">Discover New Hot Spots</p>
-
-
-    <div id="map"></div>
-    <div id="work"></div>
-
-<script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+<div id="top">
+  <h1>Map It Up</h1>
+  <a href = "history.html">
+  <button class="history">Street View and History</button>
+  </a> </div>
+<p id="short">Discover New Hot Spots</p>
+<div id="map"></div>
+<div id="work"></div>
+<script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script> 
 <script>
       /**
       * Reference to Firebase database.
@@ -154,9 +145,23 @@
       var burgerFlag = false;
       var emoji_to_use;
       var map;
+	  var emoji_marker;
+	  var num_length;
 
-      
-
+      var temp_data;
+	  var temp_key;
+	  // main array for holding all emojis
+	  
+	  var emoji_array = [];
+	  // each array holds differet emojis
+	  var emoji_array1 = [];
+	  var emoji_array2 = [];
+	  var emoji_array3 = [];
+	  var emoji_array4 = [];
+	  var emoji_array5 = [];
+	  var emoji_array6 = [];
+	  //for new emoji
+	  var emoji_addon_array = [];
       /**
        * Creates a map object with a click listener and a heatmap.
        */
@@ -205,6 +210,9 @@
           map: map,
           icon: emoji_to_use
         });
+		emoji_addon_array.push(marker);
+	    marker.setVisible(true);
+
       }
 
       /**
@@ -298,7 +306,7 @@
       }
 
 
-
+	  // assign the emoji to "emoji_to_use"
       function markBookEmoji() {
         console.log("Book Emoji was clicked on");
         bookFlag = true;
@@ -313,7 +321,7 @@
         bookFlag = false;
         emoji_to_use = 'burger.png';
       }
-	function markRunningEmoji() {
+	 function markRunningEmoji() {
         console.log("Book Emoji was clicked on");
         bookFlag = true;
         burgerFlag = false;
@@ -344,60 +352,234 @@
 	var working = firebase.child('clicks');
       working.on('value', gotData, errData);
 
-
+ // get data from cloud and display on the map
   function gotData(data) {
     var latitude;
     var longitude;
     var emoji;
 
     var clickData = data.val();
+	temp_data = clickData;
     var keys = Object.keys(clickData);
-
-   for (var i = 0; i < keys.length; i++) {
+	// temp key is a temp variable that holds keys and be used in all filter functions.
+	temp_key = keys;
+	console.log(keys);
+	num_length = keys.length;
+	
+    for (var i = 0; i < keys.length; i++) {
       var k = keys[i];
       latitude = clickData[k].lat;
       longitude = clickData[k].lng;
       emoji = clickData[k].picture;
       //console.log(latitude, longitude);
       var location_to_mark = new google.maps.LatLng(latitude,longitude);
-      var marker = new google.maps.Marker({
+      emoji_marker = new google.maps.Marker({
         position: location_to_mark,
         map: map,
         icon: emoji
       });
-
+      // assign emoji_marker to the emoji array which we are using in filter.
+	  emoji_array[i] = emoji_marker;
+	  emoji_marker.setVisible(true);
+      //console.log(emoji_array[i]);
     }
 
   }
+	
+	// from here, all the filter_XXX functions
+	// logic: add all the emoji from data base to a global array,
+	//		  loop through the array and use setvisible function to make all emoji disappear
+	//        then compare the filetered emoji with database emoji array, if match, display it
+  function filter_book(){
+	var latitude;
+    var longitude;
+	// combain all the arrays to concat_emoji array
+	var concat_emoji_array = emoji_array.concat( emoji_array1,emoji_array2, emoji_array3, emoji_array4, emoji_array5, emoji_array6, emoji_addon_array);
+	// loop through the array, and check if undefined
+	for (var i = 0; i < concat_emoji_array.length; i++) {
+	  if (typeof concat_emoji_array[i] !== 'undefined' && concat_emoji_array[i] !== null){
+		  // if not undefined, make it invisible
+	  		concat_emoji_array[i].setVisible(false);
+		  //just for testing
+		  console.log(concat_emoji_array[i].icon);
+	  //check if temp_key is undefined, if not get the latitude and longitude
+      if (typeof temp_key[i] !== 'undefined' && temp_key[i] !== null){
 
+      var k = temp_key[i];
+	  console.log(k);
+	  latitude = temp_data[k].lat;
+	  console.log(latitude);
+      longitude = temp_data[k].lng;
+      emoji_marker = temp_data[k].picture;
+	  //if the emoji is the correct, display the emoji
+	  if (emoji_marker == 'book.png'){
+	   var location_to_mark = new google.maps.LatLng(latitude,longitude);
+        	emoji_marker = new google.maps.Marker({
+			position: location_to_mark,
+			map: map,
+			icon: emoji_marker
+      	 });
+		// add displayed emoji to the emoji array, which we will concat in the concat_emoji_array
+		emoji_array1[i] = emoji_marker;
+
+      }
+	}}
+	 } 	
+  }
+	
+	// the same logic as the filter_book
+  function filter_burger(){
+	var latitude;
+    var longitude;
+	var concat_emoji_array = emoji_array.concat(emoji_array1, emoji_array2, emoji_array3, emoji_array4, emoji_array5, emoji_array6, emoji_addon_array);
+
+	for (var i = 0; i < concat_emoji_array.length; i++) {
+	  if (typeof concat_emoji_array[i] !== 'undefined' && concat_emoji_array[i] !== null){
+	  		concat_emoji_array[i].setVisible(false);
+		  
+	  //console.log('buger' + concat_emoji_array[i]);
+      if (typeof temp_key[i] !== 'undefined' && temp_key[i] !== null){
+      var k = temp_key[i];
+	  //console.log("k "+k);
+	  
+	  latitude = temp_data[k].lat;
+	  //console.log(latitude);
+      longitude = temp_data[k].lng;
+      emoji_marker = temp_data[k].picture;
+	  //console.log(emoji_marker);
+	  if (emoji_marker == 'burger.png'){
+	  var location_to_mark = new google.maps.LatLng(latitude,longitude);
+      	emoji_marker = new google.maps.Marker({
+			position: location_to_mark,
+			map: map,
+			icon: emoji_marker
+      	});
+		  emoji_array2[i] = emoji_marker;
+      }
+	  }}
+	}
+  }
+  function filter_running(){
+	  var latitude;
+    var longitude;
+      var concat_emoji_array = emoji_array.concat(emoji_array1, emoji_array2, emoji_array3, emoji_array4, emoji_array5, emoji_array6, emoji_addon_array);
+
+	  for (var i = 0; i < concat_emoji_array.length; i++) {
+	  if (typeof concat_emoji_array[i] !== 'undefined' && concat_emoji_array[i] !== null){
+	  		concat_emoji_array[i].setVisible(false);
+      if (typeof temp_key[i] !== 'undefined' && temp_key[i] !== null){
+		  
+      var k = temp_key[i];
+	  
+	  latitude = temp_data[k].lat;
+      longitude = temp_data[k].lng;
+      emoji_marker = temp_data[k].picture;
+	  //console.log(emoji_marker);
+	  if (emoji_marker == 'running.png'){
+	  var location_to_mark = new google.maps.LatLng(latitude,longitude);
+      	emoji_marker = new google.maps.Marker({
+			position: location_to_mark,
+			map: map,
+			icon: emoji_marker
+      	});
+		 emoji_array3[i] = emoji_marker;
+      }
+	  }
+	}}
+  }
+  function filter_gym(){
+	  var latitude;
+    var longitude;
+    var concat_emoji_array = emoji_array.concat(emoji_array1, emoji_array2, emoji_array3, emoji_array4, emoji_array5, emoji_array6, emoji_addon_array);
+
+	for (var i = 0; i < concat_emoji_array.length; i++) {
+	  if (typeof concat_emoji_array[i] !== 'undefined' && concat_emoji_array[i] !== null){
+	  		concat_emoji_array[i].setVisible(false);
+      if (typeof temp_key[i] !== 'undefined' && temp_key[i] !== null){
+		  
+      var k = temp_key[i];
+	  latitude = temp_data[k].lat;
+      longitude = temp_data[k].lng;
+      emoji_marker = temp_data[k].picture;
+	  //console.log(emoji_marker);
+	  if (emoji_marker == 'gym.png'){
+	  var location_to_mark = new google.maps.LatLng(latitude,longitude);
+      	emoji_marker = new google.maps.Marker({
+			position: location_to_mark,
+			map: map,
+			icon: emoji_marker
+      	});
+		 emoji_array4[i] = emoji_marker;
+      }
+	  }}
+	}
+  }
+  function filter_music(){
+	  var latitude;
+    var longitude;
+      var concat_emoji_array = emoji_array.concat(emoji_array1, emoji_array2, emoji_array3, emoji_array4, emoji_array5, emoji_array6, emoji_addon_array);
+
+	for (var i = 0; i < concat_emoji_array.length; i++) {
+	  if (typeof concat_emoji_array[i] !== 'undefined' && concat_emoji_array[i] !== null){
+	  		concat_emoji_array[i].setVisible(false);
+      if (typeof temp_key[i] !== 'undefined' && temp_key[i] !== null){
+		  
+      var k = temp_key[i];
+	  latitude = temp_data[k].lat;
+      longitude = temp_data[k].lng;
+      emoji_marker = temp_data[k].picture;
+	  //console.log(emoji_marker);
+	  if (emoji_marker == 'music.png'){
+	  var location_to_mark = new google.maps.LatLng(latitude,longitude);
+      	emoji_marker = new google.maps.Marker({
+			position: location_to_mark,
+			map: map,
+			icon: emoji_marker
+      	});
+		 emoji_array5[i] = emoji_marker;
+      }}
+	 }
+	}
+  }
+  function filter_sleep(){
+	  var latitude;
+    var longitude;
+      var concat_emoji_array = emoji_array.concat(emoji_array1, emoji_array2, emoji_array3, emoji_array4, emoji_array5, emoji_array6, emoji_addon_array);
+
+	  for (var i = 0; i < concat_emoji_array.length; i++) {
+	  if (typeof concat_emoji_array[i] !== 'undefined' && concat_emoji_array[i] !== null){
+	  		concat_emoji_array[i].setVisible(false);
+		  
+      if (typeof temp_key[i] !== 'undefined' && temp_key[i] !== null){
+
+      var k = temp_key[i];
+	  latitude = temp_data[k].lat;
+      longitude = temp_data[k].lng;
+      emoji_marker = temp_data[k].picture;
+	  //console.log(emoji_marker);
+	  if (emoji_marker == 'sleep.png'){
+	  var location_to_mark = new google.maps.LatLng(latitude,longitude);
+      	emoji_marker = new google.maps.Marker({
+			position: location_to_mark,
+			map: map,
+			icon: emoji_marker
+      	});
+		emoji_array6[i] = emoji_marker;
+      }
+	  }}
+	}
+  }
   function errData(err) {
     console.log('Error!');
     console.log(err);
   }
     </script>
-
-	<div class="dropdown" id="Trending_Section">
-    <br>
-	<button onclick="myFunction()" class="dropbtn">Trending</button>
-  		<div id="myDropdown" class="dropdown-content">
-    		<a href="#">#Chill</a>
-   			 <a href="#">#Study</a>
-   		 	<a href="#">#Group</a>
-			<a href="#">#Alone</a>
-  		</div>
-	</div>
-
-  <div class="bookEmoji" id="bookEmoji">
-    <img onclick="markBookEmoji()" src="book.png" />
-    <img onclick="markBurgerEmoji()" src="burger.png" />
-	<img onclick="markRunningEmoji()" src="running.png" />
-	<img onclick="markGymEmoji()" src="gym.png" />
-	<img onclick="markMusicEmoji()" src="music.png" />
-	<img onclick="markSleepEmoji()" src="sleep.png" />
-  </div>
-
-
-	<script>
+<div class="dropdown" id="Trending_Section"> <br>
+  <button onclick="myFunction()" class="dropbtn">Trending</button>
+  <div id="myDropdown" class="dropdown-content"> <img onclick="filter_book()" src="book.png" /> <img onclick="filter_burger()" src="burger.png" /> <img onclick="filter_running()" src="running.png" /> <img onclick="filter_gym()" src="gym.png" /> <img onclick="filter_music()" src="music.png" /> <img onclick="filter_sleep()" src="sleep.png" /> </div>
+</div>
+<div class="bookEmoji" id="bookEmoji"> <img onclick="markBookEmoji()" src="book.png" /> <img onclick="markBurgerEmoji()" src="burger.png" /> <img onclick="markRunningEmoji()" src="running.png" /> <img onclick="markGymEmoji()" src="gym.png" /> <img onclick="markMusicEmoji()" src="music.png" /> <img onclick="markSleepEmoji()" src="sleep.png" /> </div>
+<script>
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 function myFunction() {
@@ -418,10 +600,7 @@ window.onclick = function(event) {
     }
   }
 }
-</script>
-
+</script> 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqsnk4ZFV7jtlCZ-l161iBo7BpQFJueA8&libraries=visualization&callback=initMap" async defer></script>
-
-
 </body>
 </html>
