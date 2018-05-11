@@ -4,67 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,
   initial-scale=1.0">
-  <title>Google Street View Searcher</title>
+  <title>History</title>
   <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
   <script src="jquery-3.3.1.min.js"></script>
-  <style>
-	body{background-color: aliceblue;}
-	      .history{
-      position: absolute;
-      right: 0;
-    }
-  .photo {
-  margin-left: auto;
-  margin-right: auto;
-	border:0;
-	  height: 300px;
-      width: 100%;  
-}
-
-.address {
-color: black;
-text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
-text-align: center;
-}
-.form-container{
-		  text-align: center;
-	  }
-
-#historybutton {
-  text-align: center;
-  padding-top: 25px;
-}
-
-#test {
-  text-align: center;
-}
-</style>
-
-
+ 
 
 </head>
 <body>
 	<a href = "index.html">
     <button class="history">Home</button>
     </a>
-	
-		<h1 align="center">Street View</h1>
- 
-    <form id="form-container" class="form-container">
-      <label for="street">Street: </label><input type="text" id="street" value="">
-      <label for="city"> <br /> City: </label><input type="text" id="city" value="">
-      <button id="submit">Submit</button>
-    </form>
 
-  <div id="historybutton">
-    <button onclick="myFunction()">Display Last Saved Location</button>
-  </div>
-    <div id="test"></div>
-    <hr>
-    <h2 id="address" class="address">Enter Address Above</h2>
-	
-	<img class="photo" id="photo">
-	
+
+    <h1>Coordinate History</h1>
+  
+
+  <div id="test"></div>
+
  <script type="text/javascript">
  var lat;
  var lng;
@@ -83,16 +39,20 @@ text-align: center;
   var ref = database.ref('clicks');
   ref.on('value', gotData, errData);
 
+  
+
   function gotData(data) {
     var clickData = data.val();
     var keys = Object.keys(clickData);
 
-    var lastClick = keys.length - 1;
-
-    var k = keys[lastClick];
-    lat = clickData[k].lat;
-    lng = clickData[k].lng;
-    console.log(lat, lng);
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i];
+      latitude = clickData[k].lat;
+      longitude = clickData[k].lng;
+      
+      $('#test').append("<li>Latitude: " + latitude + " Longitude: " + longitude + "</li>" + "<hr>");
+    }
+    
   }
 
   function errData(err) {
@@ -100,29 +60,7 @@ text-align: center;
     console.log(err);
   }
 
-function myFunction() {
-  $('#test').html('Latitude: ' + lat + ' ' + 'Longitude: ' + lng);
 
-      var a = [ '\u{1F96A}' ];
-      console.log(a[0]);
-      $('#test').html(a[0]);
-
-}
-  	function loadData() {
-  	var $address = $("#address");
-  	var street = $("#street").val();
-  	var city = $("#city").val();
-	var address = street + ", " + city; 
-  	$address.text("Address: " + address + "");
-
-  	var streetViewURL = "http://maps.googleapis.com/maps/api/streetview?size=600x400&location=" + address + "&fov=90&heading=235&pitch=10&key=AIzaSyCuWPQx166d5TWWlsz3kCCvhhIvRPe3EnM";
-//var streetViewURL = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=40.720032,-73.988354&fov=90&heading=235&pitch=10&key=AIzaSyCuWPQx166d5TWWlsz3kCCvhhIvRPe3EnM"
-	$('#photo').attr("src", streetViewURL);
-  	return false;
-
-  };
- 
-	$("#form-container").submit(loadData);
 </script>
 
 
