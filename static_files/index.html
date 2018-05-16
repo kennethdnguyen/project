@@ -1,606 +1,481 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,
   initial-scale=1.0">
-<title>Cogs 121 Project</title>
-<style>
-#map {
-	height: 450px;
-	width: 100%;
-}
-#top {
-	display: flex;
-	justify-content: center;
-	position: relative;
-}
-h1 {
-	text-align: center;
-}
-#short {
-	text-align: center;
-}
-.history {
-	position: absolute;
-	right: 0;
-}
-.dropbtn {
-	background-color: #4CAF50;
-	color: white;
-	padding: 16px;
-	font-size: 16px;
-	border: none;
-	cursor: pointer;
-}
-.dropbtn:hover, .dropbtn:focus {
-	background-color: #4CAF50;
-}
-.dropdown {
-	position: relative;
-	display: flex;
-	justify-content: center;
-	padding-top: 10px;
-}
-.dropdown-content {
-	display: none;
-	position: absolute;
-	background-color: #f1f1f1;
-	min-width: 160px;
-	overflow: auto;
-	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-	z-index: 1;
-	bottom: 100%; /* added this attribute */
-}
-.dropdown-content a {
-	color: black;
-	padding: 12px 16px;
-	text-decoration: none;
-	display: block;
-}
-.dropdown a:hover {
-	background-color: #ddd
-}
-.show {
-	display: block;
-}
-</style>
+  <title>Cogs 121 Project</title>
+  <style>
+  #map {
+    height: 450px;
+    width: 100%;
+  }
+
+  #top {
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  #short {
+    text-align: center;
+  }
+
+  .history {
+    position: absolute;
+    right: 0;
+  }
+
+  .dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+
+  .dropbtn:hover,
+  .dropbtn:focus {
+    background-color: #4CAF50;
+  }
+
+  .dropdown {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    bottom: 100%;
+    /* added this attribute */
+  }
+
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown a:hover {
+    background-color: #ddd
+  }
+
+  .show {
+    display: block;
+  }
+  </style>
 </head>
+
 <body>
-<div id="top">
-  <h1>Map It Up</h1>
-  <a href = "history.html">
-  <button class="history">Street View and History</button>
-  </a> </div>
-<p id="short">Discover New Hot Spots</p>
-<div id="map"></div>
-<div id="work"></div>
-<script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script> 
-<script>
-      /**
-      * Reference to Firebase database.
-      * @const
-      */
-      // var firebase = new Firebase('https://testtest-98f82.firebaseio.com');
-      var firebase = new Firebase('https://cogs121-4b110.firebaseio.com');
-      // var firebase = new Firebase('https://fire-map-tutorial.firebaseio.com/');
+  <div id="top">
+    <h1>Map It Up</h1>
+    <a href="history.html">
+      <button class="history">Coordinate History</button>
+    </a>
+  </div>
+  <p id="short">Discover New Hot Spots</p>
+  <div id="map"></div>
+  <div id="work"></div>
+  <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+  <script>
+  /**
+   * Reference to Firebase database.
+   * @const
+   */
+  // var firebase = new Firebase('https://testtest-98f82.firebaseio.com');
+  var firebase = new Firebase('https://cogs121-4b110.firebaseio.com');
+  // var firebase = new Firebase('https://fire-map-tutorial.firebaseio.com/');
 
 
 
-      /**
-      * Data object to be written to Firebase.
-      */
-      var data = {
-        sender: null,
-        timestamp: null,
-        lat: null,
-        lng: null,
-        picture: null
-      };
+  /**
+   * Data object to be written to Firebase.
+   */
+  var data = {
+    sender: null,
+    timestamp: null,
+    lat: null,
+    lng: null,
+    picture: null
+  };
 
 
-      function makeInfoBox(controlDiv, map) {
-        // Set CSS for the control border.
-        var controlUI = document.createElement('div');
-        controlUI.style.boxShadow = 'rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px';
-        controlUI.style.backgroundColor = '#fff';
-        controlUI.style.border = '2px solid #fff';
-        controlUI.style.borderRadius = '2px';
-        controlUI.style.marginBottom = '22px';
-        controlUI.style.marginTop = '10px';
-        controlUI.style.textAlign = 'center';
-        controlDiv.appendChild(controlUI);
+  function makeInfoBox(controlDiv, map) {
+    // Set CSS for the control border.
+    var controlUI = document.createElement('div');
+    controlUI.style.boxShadow = 'rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px';
+    controlUI.style.backgroundColor = '#fff';
+    controlUI.style.border = '2px solid #fff';
+    controlUI.style.borderRadius = '2px';
+    controlUI.style.marginBottom = '22px';
+    controlUI.style.marginTop = '10px';
+    controlUI.style.textAlign = 'center';
+    controlDiv.appendChild(controlUI);
 
-        // Set CSS for the control interior.
-        var controlText = document.createElement('div');
-        controlText.style.color = 'rgb(25,25,25)';
-        controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-        controlText.style.fontSize = '100%';
-        controlText.style.padding = '6px';
-        controlText.textContent = 'The map shows all clicks made in the last week.';
-        controlUI.appendChild(controlText);
-      }
+    // Set CSS for the control interior.
+    var controlText = document.createElement('div');
+    controlText.style.color = 'rgb(25,25,25)';
+    controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+    controlText.style.fontSize = '100%';
+    controlText.style.padding = '6px';
+    controlText.textContent = 'The map shows all clicks made in the last week.';
+    controlUI.appendChild(controlText);
+  }
 
-      /**
-      * Starting point for running the program. Authenticates the user.
-      * @param {function()} onAuthSuccess - Called when authentication succeeds.
-      */
-      function initAuthentication(onAuthSuccess) {
-        firebase.authAnonymously(function(error, authData) {
-          // if (error) {
-            // console.log('Login Failed!', error);
-          // } else {
-            // data.sender = authData.uid;
-            // onAuthSuccess();
-          // }
-          onAuthSuccess();
-        }, {remember: 'sessionOnly'});  // Users will get a new id for every session.
-      }
-
-
+  /**
+   * Starting point for running the program. Authenticates the user.
+   * @param {function()} onAuthSuccess - Called when authentication succeeds.
+   */
+  function initAuthentication(onAuthSuccess) {
+    firebase.authAnonymously(function(error, authData) {
+      // if (error) {
+      // console.log('Login Failed!', error);
+      // } else {
+      // data.sender = authData.uid;
+      // onAuthSuccess();
+      // }
+      onAuthSuccess();
+    }, { remember: 'sessionOnly' }); // Users will get a new id for every session.
+  }
 
 
-      var bookFlag = false;
-      var burgerFlag = false;
-      var emoji_to_use;
-      var map;
-	  var emoji_marker;
-	  var num_length;
 
-      var temp_data;
-	  var temp_key;
-	  // main array for holding all emojis
-	  
-	  var emoji_array = [];
-	  // each array holds differet emojis
-	  var emoji_array1 = [];
-	  var emoji_array2 = [];
-	  var emoji_array3 = [];
-	  var emoji_array4 = [];
-	  var emoji_array5 = [];
-	  var emoji_array6 = [];
-	  //for new emoji
-	  var emoji_addon_array = [];
-      /**
-       * Creates a map object with a click listener and a heatmap.
-       */
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat:32.8777, lng:-117.2372},
-          zoom:  15,
 
-          disableDoubleClickZoom: true,
-          streetViewControl: false,
-        });
+  var emoji_to_use;
+  var map;
+  var emoji_marker;
+  var num_length;
+
+  var using_filter = false;
+  var first_call = true;
+
+  var temp_data;
+  var temp_key;
+  // main array for holding all emojis
+
+  var emoji_array = [];
+  /**
+   * Creates a map object with a click listener and a heatmap.
+   */
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: { lat: 32.8777, lng: -117.2372 },
+      zoom: 15,
+
+      disableDoubleClickZoom: true,
+      streetViewControl: false,
+    });
 
 
 
     // Create the DIV to hold the control and call the makeInfoBox() constructor
-        // passing in this DIV.
-        var infoBoxDiv = document.createElement('div');
-        makeInfoBox(infoBoxDiv, map);
-        map.controls[google.maps.ControlPosition.TOP_CENTER].push(infoBoxDiv);
+    // passing in this DIV.
+    var infoBoxDiv = document.createElement('div');
+    makeInfoBox(infoBoxDiv, map);
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(infoBoxDiv);
 
 
-        // Listen for clicks and add the location of the click to firebase.
-        map.addListener('click', function(e) {
-          placeMarker(e.latLng, map);
-          data.lat = e.latLng.lat();
-          data.lng = e.latLng.lng();
-          data.picture = emoji_to_use;
-          addToFirebase(data);
+    // Listen for clicks and add the location of the click to firebase.
+    map.addListener('click', function(e) {
+      placeMarker(e.latLng, map);
+      data.lat = e.latLng.lat();
+      data.lng = e.latLng.lng();
+      data.picture = emoji_to_use;
+      addToFirebase(data);
+    });
+
+    // Create a heatmap.
+    var heatmap = new google.maps.visualization.HeatmapLayer({
+      data: [],
+      map: map,
+      radius: 16
+    });
+
+    initAuthentication(initFirebase.bind(undefined, heatmap));
+  }
+
+  function placeMarker(latLng, map) {
+
+    // console.log(emoji_to_use);
+    var marker = new google.maps.Marker({
+      position: latLng,
+      map: map,
+      icon: emoji_to_use
+    });
+    console.log("Placing marker here");
+    emoji_array.push(marker);
+    marker.setVisible(true);
+
+  }
+  function unfilter() {
+   for (var i = 0; i < emoji_array.length; i++) {
+      emoji_array[i].setVisible(true);
+    }
+      using_filter = false;
+  }
+
+
+  function filter(emoji) {
+    if (using_filter) {
+      unfilter();
+    }
+
+    switch (emoji) {
+      case "burger":
+        icon_name = "burger.png";
+        break;
+
+      case "book":
+        icon_name = "book.png";
+        break;
+
+      case "running":
+        icon_name = "running.png";
+        break;
+
+      case "gym":
+        icon_name = "gym.png";
+        break;
+
+      case "sleep":
+        icon_name = "sleep.png";
+        break;
+
+      case "music":
+        icon_name = "music.png";
+        break;
+
+      default:
+        icon_name = "ERROR";
+        console.log("Error in filtering");
+        // should throw error here
+    }
+
+    var filteredEmojis = emoji_array.filter(function(marker){
+      return marker.icon != icon_name;
+    });
+
+    // set all other emojis to not visible
+    for (var i = 0; i < filteredEmojis.length; i++) {
+      filteredEmojis[i].setVisible(false);
+    }
+    using_filter = true;
+  }
+
+  /**
+   * Set up a Firebase with deletion on clicks older than expirySeconds
+   * @param {!google.maps.visualization.HeatmapLayer} heatmap The heatmap to
+   * which points are added from Firebase.
+   */
+  function initFirebase(heatmap) {
+
+    // 10 minutes before current time.
+    var startTime = new Date().getTime() - (60 * 10080 * 1000);
+
+    // Reference to the clicks in Firebase.
+    var clicks = firebase.child('clicks');
+
+    // Listener for when a click is added.
+    clicks.orderByChild('timestamp').startAt(startTime).on('child_added',
+      function(snapshot) {
+
+        // Get that click from firebase.
+        var newPosition = snapshot.val();
+        var point = new google.maps.LatLng(newPosition.lat, newPosition.lng);
+        var elapsed = new Date().getTime() - newPosition.timestamp;
+
+        // Add the point to  the heatmap.
+        heatmap.getData().push(point);
+
+        // Requests entries older than expiry time (10 minutes).
+        var expirySeconds = Math.max(60 * 10080 * 1000 - elapsed, 0);
+        // Set client timeout to remove the point after a certain time.
+        window.setTimeout(function() {
+          // Delete the old point from the database.
+          snapshot.ref().remove();
+        }, expirySeconds);
+      }
+    );
+
+    // Remove old data from the heatmap when a point is removed from firebase.
+    clicks.on('child_removed', function(snapshot, prevChildKey) {
+      var heatmapData = heatmap.getData();
+      var i = 0;
+      while (snapshot.val().lat != heatmapData.getAt(i).lat() ||
+        snapshot.val().lng != heatmapData.getAt(i).lng()) {
+        i++;
+      }
+      heatmapData.removeAt(i);
+    });
+  }
+
+  /**
+   * Updates the last_message/ path with the current timestamp.
+   * @param {function(Date)} addClick After the last message timestamp has been updated,
+   *     this function is called with the current timestamp to add the
+   *     click to the firebase.
+   */
+  function getTimestamp(addClick) {
+    // Reference to location for saving the last click time.
+    var ref = firebase.child('last_message/' + data.sender);
+
+    ref.onDisconnect().remove(); // Delete reference from firebase on disconnect.
+
+    // Set value to timestamp.
+    ref.set(Firebase.ServerValue.TIMESTAMP, function(err) {
+      if (err) { // Write to last message was unsuccessful.
+        // console.log(err);
+      } else { // Write to last message was successful.
+        ref.once('value', function(snap) {
+          addClick(snap.val()); // Add click with same timestamp.
+        }, function(err) {
+          // console.warn(err);
         });
-
-        // Create a heatmap.
-        var heatmap = new google.maps.visualization.HeatmapLayer({
-          data: [],
-          map: map,
-          radius: 16
-        });
-
-        initAuthentication(initFirebase.bind(undefined, heatmap));
       }
+    });
+  }
 
-      function placeMarker(latLng, map) {        
-     
-        console.log(emoji_to_use);
-        var marker = new google.maps.Marker({
-          position: latLng,
-          map: map,
-          icon: emoji_to_use
-        });
-		emoji_addon_array.push(marker);
-	    marker.setVisible(true);
+  /**
+   * Adds a click to firebase.
+   * @param {Object} data The data to be added to firebase.
+   *     It contains the lat, lng, sender, and the emoji selected and timestamp.
+   */
+  function addToFirebase(data) {
+    getTimestamp(function(timestamp) {
+      // Add the new timestamp to the record data.
+      data.timestamp = timestamp;
+      var ref = firebase.child('clicks').push(data, function(err) {
+        if (err) { // Data was not written to firebase.
+          // console.warn(err);
+        }
+      });
+    });
+  }
 
-      }
+  // assign the emoji to "emoji_to_use"
+  function markBookEmoji() {
+    console.log("Book Emoji was clicked on");
+    emoji_to_use = 'book.png';
+  }
 
-      /**
-       * Set up a Firebase with deletion on clicks older than expirySeconds
-       * @param {!google.maps.visualization.HeatmapLayer} heatmap The heatmap to
-       * which points are added from Firebase.
-       */
-      function initFirebase(heatmap) {
+  function markBurgerEmoji() {
+    console.log("Burger Emoji was clicked on");
+    emoji_to_use = 'burger.png';
+  }
 
-        // 10 minutes before current time.
-        var startTime = new Date().getTime() - (60 * 10080 * 1000);
+  function markRunningEmoji() {
+    console.log("Book Emoji was clicked on");
+    emoji_to_use = 'running.png';
+  }
 
-        // Reference to the clicks in Firebase.
-        var clicks = firebase.child('clicks');
+  function markGymEmoji() {
+    console.log("Book Emoji was clicked on");
+    emoji_to_use = 'gym.png';
+  }
 
-        // Listener for when a click is added.
-        clicks.orderByChild('timestamp').startAt(startTime).on('child_added',
-          function(snapshot) {
+  function markSleepEmoji() {
+    console.log("Book Emoji was clicked on");
+    emoji_to_use = 'sleep.png';
+  }
 
-            // Get that click from firebase.
-            var newPosition = snapshot.val();
-            var point = new google.maps.LatLng(newPosition.lat, newPosition.lng);
-            var elapsed = new Date().getTime() - newPosition.timestamp;
+  function markMusicEmoji() {
+    console.log("Book Emoji was clicked on");
+    emoji_to_use = 'music.png';
 
-            // Add the point to  the heatmap.
-            heatmap.getData().push(point);
+  }
+  var working = firebase.child('clicks');
+  working.on('value', gotData, errData);
 
-            // Requests entries older than expiry time (10 minutes).
-            var expirySeconds = Math.max(60 * 10080 * 1000 - elapsed, 0);
-            // Set client timeout to remove the point after a certain time.
-            window.setTimeout(function() {
-              // Delete the old point from the database.
-              snapshot.ref().remove();
-            }, expirySeconds);
-          }
-        );
-
-        // Remove old data from the heatmap when a point is removed from firebase.
-        clicks.on('child_removed', function(snapshot, prevChildKey) {
-          var heatmapData = heatmap.getData();
-          var i = 0;
-          while (snapshot.val().lat != heatmapData.getAt(i).lat()
-            || snapshot.val().lng != heatmapData.getAt(i).lng()) {
-            i++;
-          }
-          heatmapData.removeAt(i);
-        });
-      }
-
-      /**
-       * Updates the last_message/ path with the current timestamp.
-       * @param {function(Date)} addClick After the last message timestamp has been updated,
-       *     this function is called with the current timestamp to add the
-       *     click to the firebase.
-       */
-      function getTimestamp(addClick) {
-        // Reference to location for saving the last click time.
-        var ref = firebase.child('last_message/' + data.sender);
-
-        ref.onDisconnect().remove();  // Delete reference from firebase on disconnect.
-
-        // Set value to timestamp.
-        ref.set(Firebase.ServerValue.TIMESTAMP, function(err) {
-          if (err) {  // Write to last message was unsuccessful.
-            console.log(err);
-          } else {  // Write to last message was successful.
-            ref.once('value', function(snap) {
-              addClick(snap.val());  // Add click with same timestamp.
-            }, function(err) {
-              console.warn(err);
-            });
-          }
-        });
-      }
-
-      /**
-       * Adds a click to firebase.
-       * @param {Object} data The data to be added to firebase.
-       *     It contains the lat, lng, sender, and the emoji selected and timestamp.
-       */
-      function addToFirebase(data) {
-        getTimestamp(function(timestamp) {
-          // Add the new timestamp to the record data.
-          data.timestamp = timestamp;
-          var ref = firebase.child('clicks').push(data, function(err) {
-            if (err) {  // Data was not written to firebase.
-              console.warn(err);
-            }
-          });
-        });
-      }
-
-
-	  // assign the emoji to "emoji_to_use"
-      function markBookEmoji() {
-        console.log("Book Emoji was clicked on");
-        bookFlag = true;
-        burgerFlag = false;
-        emoji_to_use = 'book.png';
-
-      }
-
-      function markBurgerEmoji() {
-        console.log("Burger Emoji was clicked on");
-        burgerFlag = true;
-        bookFlag = false;
-        emoji_to_use = 'burger.png';
-      }
-	 function markRunningEmoji() {
-        console.log("Book Emoji was clicked on");
-        bookFlag = true;
-        burgerFlag = false;
-        emoji_to_use = 'running.png';
-
-      }
-	function markGymEmoji() {
-        console.log("Book Emoji was clicked on");
-        bookFlag = true;
-        burgerFlag = false;
-        emoji_to_use = 'gym.png';
-
-      }
-	function markSleepEmoji() {
-        console.log("Book Emoji was clicked on");
-        bookFlag = true;
-        burgerFlag = false;
-        emoji_to_use = 'sleep.png';
-
-      }
-	function markMusicEmoji() {
-        console.log("Book Emoji was clicked on");
-        bookFlag = true;
-        burgerFlag = false;
-        emoji_to_use = 'music.png';
-
-      }
-	var working = firebase.child('clicks');
-      working.on('value', gotData, errData);
-
- // get data from cloud and display on the map
+  // get data from cloud and display on the map
   function gotData(data) {
+    if (!first_call) {
+      return 0;
+    }
+    console.log("getting data");
     var latitude;
     var longitude;
     var emoji;
 
     var clickData = data.val();
-	temp_data = clickData;
+    temp_data = clickData;
     var keys = Object.keys(clickData);
-	// temp key is a temp variable that holds keys and be used in all filter functions.
-	temp_key = keys;
-	console.log(keys);
-	num_length = keys.length;
-	
+    // temp key is a temp variable that holds keys and be used in all filter functions.
+    temp_key = keys;
+    // console.log(keys);
+    num_length = keys.length;
+
     for (var i = 0; i < keys.length; i++) {
       var k = keys[i];
       latitude = clickData[k].lat;
       longitude = clickData[k].lng;
       emoji = clickData[k].picture;
       //console.log(latitude, longitude);
-      var location_to_mark = new google.maps.LatLng(latitude,longitude);
+      var location_to_mark = new google.maps.LatLng(latitude, longitude);
       emoji_marker = new google.maps.Marker({
         position: location_to_mark,
         map: map,
         icon: emoji
       });
       // assign emoji_marker to the emoji array which we are using in filter.
-	  emoji_array[i] = emoji_marker;
-	  emoji_marker.setVisible(true);
+      emoji_array[i] = emoji_marker;
+      emoji_marker.setVisible(true);
       //console.log(emoji_array[i]);
     }
-
+    first_call = false;
   }
-	
-	// from here, all the filter_XXX functions
-	// logic: add all the emoji from data base to a global array,
-	//		  loop through the array and use setvisible function to make all emoji disappear
-	//        then compare the filetered emoji with database emoji array, if match, display it
-  function filter_book(){
-	var latitude;
-    var longitude;
-	// combain all the arrays to concat_emoji array
-	var concat_emoji_array = emoji_array.concat( emoji_array1,emoji_array2, emoji_array3, emoji_array4, emoji_array5, emoji_array6, emoji_addon_array);
-	// loop through the array, and check if undefined
-	for (var i = 0; i < concat_emoji_array.length; i++) {
-	  if (typeof concat_emoji_array[i] !== 'undefined' && concat_emoji_array[i] !== null){
-		  // if not undefined, make it invisible
-	  		concat_emoji_array[i].setVisible(false);
-		  //just for testing
-		  console.log(concat_emoji_array[i].icon);
-	  //check if temp_key is undefined, if not get the latitude and longitude
-      if (typeof temp_key[i] !== 'undefined' && temp_key[i] !== null){
 
-      var k = temp_key[i];
-	  console.log(k);
-	  latitude = temp_data[k].lat;
-	  console.log(latitude);
-      longitude = temp_data[k].lng;
-      emoji_marker = temp_data[k].picture;
-	  //if the emoji is the correct, display the emoji
-	  if (emoji_marker == 'book.png'){
-	   var location_to_mark = new google.maps.LatLng(latitude,longitude);
-        	emoji_marker = new google.maps.Marker({
-			position: location_to_mark,
-			map: map,
-			icon: emoji_marker
-      	 });
-		// add displayed emoji to the emoji array, which we will concat in the concat_emoji_array
-		emoji_array1[i] = emoji_marker;
-
-      }
-	}}
-	 } 	
-  }
-	
-	// the same logic as the filter_book
-  function filter_burger(){
-	var latitude;
-    var longitude;
-	var concat_emoji_array = emoji_array.concat(emoji_array1, emoji_array2, emoji_array3, emoji_array4, emoji_array5, emoji_array6, emoji_addon_array);
-
-	for (var i = 0; i < concat_emoji_array.length; i++) {
-	  if (typeof concat_emoji_array[i] !== 'undefined' && concat_emoji_array[i] !== null){
-	  		concat_emoji_array[i].setVisible(false);
-		  
-	  //console.log('buger' + concat_emoji_array[i]);
-      if (typeof temp_key[i] !== 'undefined' && temp_key[i] !== null){
-      var k = temp_key[i];
-	  //console.log("k "+k);
-	  
-	  latitude = temp_data[k].lat;
-	  //console.log(latitude);
-      longitude = temp_data[k].lng;
-      emoji_marker = temp_data[k].picture;
-	  //console.log(emoji_marker);
-	  if (emoji_marker == 'burger.png'){
-	  var location_to_mark = new google.maps.LatLng(latitude,longitude);
-      	emoji_marker = new google.maps.Marker({
-			position: location_to_mark,
-			map: map,
-			icon: emoji_marker
-      	});
-		  emoji_array2[i] = emoji_marker;
-      }
-	  }}
-	}
-  }
-  function filter_running(){
-	  var latitude;
-    var longitude;
-      var concat_emoji_array = emoji_array.concat(emoji_array1, emoji_array2, emoji_array3, emoji_array4, emoji_array5, emoji_array6, emoji_addon_array);
-
-	  for (var i = 0; i < concat_emoji_array.length; i++) {
-	  if (typeof concat_emoji_array[i] !== 'undefined' && concat_emoji_array[i] !== null){
-	  		concat_emoji_array[i].setVisible(false);
-      if (typeof temp_key[i] !== 'undefined' && temp_key[i] !== null){
-		  
-      var k = temp_key[i];
-	  
-	  latitude = temp_data[k].lat;
-      longitude = temp_data[k].lng;
-      emoji_marker = temp_data[k].picture;
-	  //console.log(emoji_marker);
-	  if (emoji_marker == 'running.png'){
-	  var location_to_mark = new google.maps.LatLng(latitude,longitude);
-      	emoji_marker = new google.maps.Marker({
-			position: location_to_mark,
-			map: map,
-			icon: emoji_marker
-      	});
-		 emoji_array3[i] = emoji_marker;
-      }
-	  }
-	}}
-  }
-  function filter_gym(){
-	  var latitude;
-    var longitude;
-    var concat_emoji_array = emoji_array.concat(emoji_array1, emoji_array2, emoji_array3, emoji_array4, emoji_array5, emoji_array6, emoji_addon_array);
-
-	for (var i = 0; i < concat_emoji_array.length; i++) {
-	  if (typeof concat_emoji_array[i] !== 'undefined' && concat_emoji_array[i] !== null){
-	  		concat_emoji_array[i].setVisible(false);
-      if (typeof temp_key[i] !== 'undefined' && temp_key[i] !== null){
-		  
-      var k = temp_key[i];
-	  latitude = temp_data[k].lat;
-      longitude = temp_data[k].lng;
-      emoji_marker = temp_data[k].picture;
-	  //console.log(emoji_marker);
-	  if (emoji_marker == 'gym.png'){
-	  var location_to_mark = new google.maps.LatLng(latitude,longitude);
-      	emoji_marker = new google.maps.Marker({
-			position: location_to_mark,
-			map: map,
-			icon: emoji_marker
-      	});
-		 emoji_array4[i] = emoji_marker;
-      }
-	  }}
-	}
-  }
-  function filter_music(){
-	  var latitude;
-    var longitude;
-      var concat_emoji_array = emoji_array.concat(emoji_array1, emoji_array2, emoji_array3, emoji_array4, emoji_array5, emoji_array6, emoji_addon_array);
-
-	for (var i = 0; i < concat_emoji_array.length; i++) {
-	  if (typeof concat_emoji_array[i] !== 'undefined' && concat_emoji_array[i] !== null){
-	  		concat_emoji_array[i].setVisible(false);
-      if (typeof temp_key[i] !== 'undefined' && temp_key[i] !== null){
-		  
-      var k = temp_key[i];
-	  latitude = temp_data[k].lat;
-      longitude = temp_data[k].lng;
-      emoji_marker = temp_data[k].picture;
-	  //console.log(emoji_marker);
-	  if (emoji_marker == 'music.png'){
-	  var location_to_mark = new google.maps.LatLng(latitude,longitude);
-      	emoji_marker = new google.maps.Marker({
-			position: location_to_mark,
-			map: map,
-			icon: emoji_marker
-      	});
-		 emoji_array5[i] = emoji_marker;
-      }}
-	 }
-	}
-  }
-  function filter_sleep(){
-	  var latitude;
-    var longitude;
-      var concat_emoji_array = emoji_array.concat(emoji_array1, emoji_array2, emoji_array3, emoji_array4, emoji_array5, emoji_array6, emoji_addon_array);
-
-	  for (var i = 0; i < concat_emoji_array.length; i++) {
-	  if (typeof concat_emoji_array[i] !== 'undefined' && concat_emoji_array[i] !== null){
-	  		concat_emoji_array[i].setVisible(false);
-		  
-      if (typeof temp_key[i] !== 'undefined' && temp_key[i] !== null){
-
-      var k = temp_key[i];
-	  latitude = temp_data[k].lat;
-      longitude = temp_data[k].lng;
-      emoji_marker = temp_data[k].picture;
-	  //console.log(emoji_marker);
-	  if (emoji_marker == 'sleep.png'){
-	  var location_to_mark = new google.maps.LatLng(latitude,longitude);
-      	emoji_marker = new google.maps.Marker({
-			position: location_to_mark,
-			map: map,
-			icon: emoji_marker
-      	});
-		emoji_array6[i] = emoji_marker;
-      }
-	  }}
-	}
-  }
   function errData(err) {
     console.log('Error!');
     console.log(err);
   }
-    </script>
-<div class="dropdown" id="Trending_Section"> <br>
-  <button onclick="myFunction()" class="dropbtn">Filter</button>
-  <div id="myDropdown" class="dropdown-content"> <img onclick="filter_book()" src="book.png" /> <img onclick="filter_burger()" src="burger.png" /> <img onclick="filter_running()" src="running.png" /> <img onclick="filter_gym()" src="gym.png" /> <img onclick="filter_music()" src="music.png" /> <img onclick="filter_sleep()" src="sleep.png" /> </div>
-</div>
-<div class="bookEmoji" id="bookEmoji"> <img onclick="markBookEmoji()" src="book.png" /> <img onclick="markBurgerEmoji()" src="burger.png" /> <img onclick="markRunningEmoji()" src="running.png" /> <img onclick="markGymEmoji()" src="gym.png" /> <img onclick="markMusicEmoji()" src="music.png" /> <img onclick="markSleepEmoji()" src="sleep.png" /> </div>
-<script>
-/* When the user clicks on the button,
-toggle between hiding and showing the dropdown content */
-function myFunction() {
+
+  </script>
+  <div class="dropdown" id="Trending_Section">
+    <br>
+    <button onclick="myFunction()" class="dropbtn">Filter</button>
+    <div id="myDropdown" class="dropdown-content"> <img onclick="filter('book')" src="book.png" /> <img onclick="filter('burger')" src="burger.png" /> <img onclick="filter('running')" src="running.png" /> <img onclick="filter('gym')" src="gym.png" /> <img onclick="filter('music')" src="music.png" /> <img onclick="filter('sleep')" src="sleep.png" /> </div>
+  </div>
+  <div class="bookEmoji" id="bookEmoji"> <img onclick="markBookEmoji()" src="book.png" /> <img onclick="markBurgerEmoji()" src="burger.png" /> <img onclick="markRunningEmoji()" src="running.png" /> <img onclick="markGymEmoji()" src="gym.png" /> <img onclick="markMusicEmoji()" src="music.png" /> <img onclick="markSleepEmoji()" src="sleep.png" /> </div>
+  <script>
+  /* When the user clicks on the button,
+  toggle between hiding and showing the dropdown content */
+  function myFunction() {
+    unfilter();
     document.getElementById("myDropdown").classList.toggle("show");
-}
+  }
 
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
+  // Close the dropdown if the user clicks outside of it
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
 
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
       }
     }
   }
-}
-</script> 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqsnk4ZFV7jtlCZ-l161iBo7BpQFJueA8&libraries=visualization&callback=initMap" async defer></script>
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqsnk4ZFV7jtlCZ-l161iBo7BpQFJueA8&libraries=visualization&callback=initMap" async defer></script>
 </body>
+
 </html>
