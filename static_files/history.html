@@ -24,6 +24,7 @@
  <script type="text/javascript">
  var lat;
  var lng;
+ var photo;
    var config = {
     apiKey: "AIzaSyCqsnk4ZFV7jtlCZ-l161iBo7BpQFJueA8",
     authDomain: "cogs121-4b110.firebaseapp.com",
@@ -49,8 +50,10 @@
       var k = keys[i];
       latitude = clickData[k].lat;
       longitude = clickData[k].lng;
+      photo = clickData[k].picture;
+      console.log(photo);
       
-      $('#test').append("<li>Latitude: " + latitude + " Longitude: " + longitude + "</li>" + "<hr>");
+      $('#test').append("<li>Latitude: " + latitude + " Longitude: " + longitude + "</li>" + "<img src=" + photo + ">" + "<hr>");
     }
     
   }
