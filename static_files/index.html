@@ -43,7 +43,7 @@
 
   .dropbtn:hover,
   .dropbtn:focus {
-    background-color: #4CAF50;
+	background-color: #4CAF50;
   }
 
   .dropdown {
@@ -456,6 +456,8 @@
   <div class="dropdown" id="Trending_Section">
     <br>
     <button onclick="myFunction()" class="dropbtn" id="toggle">Filter OFF</button>
+    <button onclick="hide_emoji()" class="dropbtn" id="hide">Emoji ON</button>
+
     <div id="myDropdown" class="dropdown-content"> <img onclick="filter('book')" src="book.png" /> <img onclick="filter('burger')" src="burger.png" /> <img onclick="filter('running')" src="running.png" /> <img onclick="filter('gym')" src="gym.png" /> <img onclick="filter('music')" src="music.png" /> <img onclick="filter('sleep')" src="sleep.png" /> </div>
   </div>
   <div class="bookEmoji" id="bookEmoji"> <img onclick="markBookEmoji()" src="book.png" /> <img onclick="markBurgerEmoji()" src="burger.png" /> <img onclick="markRunningEmoji()" src="running.png" /> <img onclick="markGymEmoji()" src="gym.png" /> <img onclick="markMusicEmoji()" src="music.png" /> <img onclick="markSleepEmoji()" src="sleep.png" /> </div>
@@ -477,7 +479,23 @@
     
 	
   }
-
+  // function that hide the emoji and show the hitmap only
+  function hide_emoji(){
+	var change = document.getElementById("hide");
+    if (change.innerHTML == "Emoji ON")
+    {
+    	change.innerHTML = "Emoji OFF";
+		for (var i = 0; i < emoji_array.length; i++) {
+      		emoji_array[i].setVisible(false);
+    	}
+	}
+	else{
+		change.innerHTML = "Emoji ON";
+		for (var i = 0; i < emoji_array.length; i++) {
+      		emoji_array[i].setVisible(true);
+    	}
+	}
+  }
   // Close the dropdown if the user clicks outside of it
   window.onclick = function(event) {
     if (!event.target.matches('.dropbtn')) {
