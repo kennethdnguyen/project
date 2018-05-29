@@ -232,6 +232,13 @@
 
 
   function filter(emoji) {
+	var change = document.getElementById("toggle");
+    if (change.innerHTML == "Filter OFF")
+    {
+    	change.innerHTML = "Filter ON";
+    }
+
+	  
     if (using_filter) {
       unfilter();
     }
@@ -448,7 +455,7 @@
   </script>
   <div class="dropdown" id="Trending_Section">
     <br>
-    <button onclick="myFunction()" class="dropbtn">Filter</button>
+    <button onclick="myFunction()" class="dropbtn" id="toggle">Filter OFF</button>
     <div id="myDropdown" class="dropdown-content"> <img onclick="filter('book')" src="book.png" /> <img onclick="filter('burger')" src="burger.png" /> <img onclick="filter('running')" src="running.png" /> <img onclick="filter('gym')" src="gym.png" /> <img onclick="filter('music')" src="music.png" /> <img onclick="filter('sleep')" src="sleep.png" /> </div>
   </div>
   <div class="bookEmoji" id="bookEmoji"> <img onclick="markBookEmoji()" src="book.png" /> <img onclick="markBurgerEmoji()" src="burger.png" /> <img onclick="markRunningEmoji()" src="running.png" /> <img onclick="markGymEmoji()" src="gym.png" /> <img onclick="markMusicEmoji()" src="music.png" /> <img onclick="markSleepEmoji()" src="sleep.png" /> </div>
@@ -456,8 +463,19 @@
   /* When the user clicks on the button,
   toggle between hiding and showing the dropdown content */
   function myFunction() {
-    unfilter();
+	var change = document.getElementById("toggle");
+    if (change.innerHTML == "Filter ON")
+    {
+    	change.innerHTML = "Filter OFF";
+    	unfilter();
+	}
+
+	else{
+		
     document.getElementById("myDropdown").classList.toggle("show");
+	}
+    
+	
   }
 
   // Close the dropdown if the user clicks outside of it
