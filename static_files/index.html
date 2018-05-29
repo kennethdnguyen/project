@@ -408,7 +408,23 @@
   }
   var working = firebase.child('clicks');
   working.on('value', gotData, errData);
+	  
+  function deleteEmoji() {
+     working.once('value', (snapshot) => {
+      const ourData = snapshot.val();
+      console.log('You received some data!', ourData);
+      const ourKeys = Object.keys(ourData);
 
+      var lastIndex = ourKeys.length - 1;
+      var k = ourKeys[lastIndex];
+
+      working.child(k).remove();
+      emoji_array[lastIndex].setVisible(false);
+      emoji_array.pop();
+
+    });
+
+  }
   // get data from cloud and display on the map
   function gotData(data) {
     if (!first_call) {
@@ -461,7 +477,11 @@
     <div id="myDropdown" class="dropdown-content"> <img onclick="filter('book')" src="book.png" /> <img onclick="filter('burger')" src="burger.png" /> <img onclick="filter('running')" src="running.png" /> <img onclick="filter('gym')" src="gym.png" /> <img onclick="filter('music')" src="music.png" /> <img onclick="filter('sleep')" src="sleep.png" /> </div>
   </div>
   <div class="bookEmoji" id="bookEmoji"> <img onclick="markBookEmoji()" src="book.png" /> <img onclick="markBurgerEmoji()" src="burger.png" /> <img onclick="markRunningEmoji()" src="running.png" /> <img onclick="markGymEmoji()" src="gym.png" /> <img onclick="markMusicEmoji()" src="music.png" /> <img onclick="markSleepEmoji()" src="sleep.png" /> </div>
+  <div>
+    <button onclick="deleteEmoji()">Delete Most Recent Emoji</button>
+  </div>
   <script>
+  
   /* When the user clicks on the button,
   toggle between hiding and showing the dropdown content */
   function myFunction() {
