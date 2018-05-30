@@ -7,55 +7,73 @@
   <meta name="viewport" content="width=device-width,
   initial-scale=1.0">
   <title>Cogs 121 Project</title>
+     <link href="introjs.css" rel="stylesheet" type="text/css">
+  <script src="intro.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500" rel="stylesheet"> 
+
+
   <style>
+
   #map {
     height: 450px;
     width: 100%;
+    border-radius: 10px;
+    margin-top: -10px;
   }
-
   #top {
     display: flex;
     justify-content: center;
     position: relative;
   }
 
+  #top button {
+    background-color: #4CAF50;
+	color: white;
+	border-radius: 10px;
+	
+    display: inline-block;
+    font-size: 12px;
+    cursor: pointer;
+  }
   h1 {
-    text-align: center;
+	text-align: center;
+	padding-bottom: 0px;
   }
-
   #short {
-    text-align: center;
+	text-align: center;
+	font-style: italic;
+	padding-bottom: 9px;
+	padding-top: 0px;
   }
-
   .history {
     position: absolute;
     right: 0;
   }
-
   .dropbtn {
-    background-color: #4CAF50;
+    background-color: #52B456;
+	border-radius: 5px;
     color: white;
-    padding: 16px;
+    padding: 12px;
     font-size: 16px;
     border: none;
     cursor: pointer;
+    margin-left: 15px;
+    margin-right: 15px;
   }
-
   .dropbtn:hover,
   .dropbtn:focus {
-	background-color: #4CAF50;
+	background-color: #52B456;
   }
-
   .dropdown {
     position: relative;
     display: flex;
     justify-content: center;
     padding-top: 10px;
   }
-
   .dropdown-content {
     display: none;
     position: absolute;
+	border-radius: 5px;
     background-color: #f1f1f1;
     min-width: 160px;
     overflow: auto;
@@ -64,34 +82,79 @@
     bottom: 100%;
     /* added this attribute */
   }
-
   .dropdown-content a {
     color: black;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
   }
-
   .dropdown a:hover {
     background-color: #ddd
   }
-
   .show {
     display: block;
   }
+
+  #bookEmoji {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+
+  #bookEmoji img {
+    margin-right: 6px;
+    margin-left: 6px;
+  }
+
+  #deletebutton {
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  #deletebutton button {
+    font-size: 16px;
+    color: white;
+    background-color: #FF362C;
+    padding: 5px;
+    margin-bottom: 10px;
+	border-radius: 5px;
+  }
+
+  body {
+	background-color: #E5E9EC;
+	font-family: 'Ubuntu', sans-serif;
+  }
+
+  #first_half {
+    background-color: #9BDAEB;
+    border-radius: 10px;
+  }
+
+  #bottom_half {
+    margin-top: 10px;
+    margin-bottom: 12px;
+    background-color: #9BDAEB;
+    border-radius: 10px;
+  }
+
   </style>
 </head>
 
 <body>
+  <div id = "first_half">
   <div id="top">
-    <h1>Map It Up</h1>
     <a href="history.html">
       <button class="history">Coordinate History</button>
     </a>
   </div>
-  <p id="short">Discover New Hot Spots</p>
-  <div id="map"></div>
-  <div id="work"></div>
+
+  <h1 data-intro="Welcome to our mobile web app!" data-step="1">Map It Up</h1>
+  <h3 id="short">Discover New Hot Spots</h3>
+  <h3></h3>
+
+  </div>
+  <div id="map" data-intro="This is a collaborative map where you can mark locations with emojis." data-step="2"></div>
+  <!-- <div id="work"></div> -->
   <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
   <script>
   /**
@@ -101,9 +164,6 @@
   // var firebase = new Firebase('https://testtest-98f82.firebaseio.com');
   var firebase = new Firebase('https://cogs121-4b110.firebaseio.com');
   // var firebase = new Firebase('https://fire-map-tutorial.firebaseio.com/');
-
-
-
   /**
    * Data object to be written to Firebase.
    */
@@ -114,8 +174,6 @@
     lng: null,
     picture: null
   };
-
-
   function makeInfoBox(controlDiv, map) {
     // Set CSS for the control border.
     var controlUI = document.createElement('div');
@@ -127,7 +185,6 @@
     controlUI.style.marginTop = '10px';
     controlUI.style.textAlign = 'center';
     controlDiv.appendChild(controlUI);
-
     // Set CSS for the control interior.
     var controlText = document.createElement('div');
     controlText.style.color = 'rgb(25,25,25)';
@@ -137,7 +194,6 @@
     controlText.textContent = 'The map shows all clicks made in the last week.';
     controlUI.appendChild(controlText);
   }
-
   /**
    * Starting point for running the program. Authenticates the user.
    * @param {function()} onAuthSuccess - Called when authentication succeeds.
@@ -153,22 +209,15 @@
       onAuthSuccess();
     }, { remember: 'sessionOnly' }); // Users will get a new id for every session.
   }
-
-
-
-
   var emoji_to_use;
   var map;
   var emoji_marker;
   var num_length;
-
   var using_filter = false;
   var first_call = true;
-
   var temp_data;
   var temp_key;
   // main array for holding all emojis
-
   var emoji_array = [];
   /**
    * Creates a map object with a click listener and a heatmap.
@@ -177,20 +226,14 @@
     map = new google.maps.Map(document.getElementById('map'), {
       center: { lat: 32.8777, lng: -117.2372 },
       zoom: 15,
-
       disableDoubleClickZoom: true,
       streetViewControl: false,
     });
-
-
-
     // Create the DIV to hold the control and call the makeInfoBox() constructor
     // passing in this DIV.
     var infoBoxDiv = document.createElement('div');
     makeInfoBox(infoBoxDiv, map);
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(infoBoxDiv);
-
-
     // Listen for clicks and add the location of the click to firebase.
     map.addListener('click', function(e) {
       placeMarker(e.latLng, map);
@@ -199,19 +242,15 @@
       data.picture = emoji_to_use;
       addToFirebase(data);
     });
-
     // Create a heatmap.
     var heatmap = new google.maps.visualization.HeatmapLayer({
       data: [],
       map: map,
       radius: 16
     });
-
     initAuthentication(initFirebase.bind(undefined, heatmap));
   }
-
   function placeMarker(latLng, map) {
-
     // console.log(emoji_to_use);
     var marker = new google.maps.Marker({
       position: latLng,
@@ -221,7 +260,6 @@
     console.log("Placing marker here");
     emoji_array.push(marker);
     marker.setVisible(true);
-
   }
   function unfilter() {
    for (var i = 0; i < emoji_array.length; i++) {
@@ -229,87 +267,68 @@
     }
       using_filter = false;
   }
-
-
   function filter(emoji) {
-	var change = document.getElementById("toggle");
+  var change = document.getElementById("toggle");
     if (change.innerHTML == "Filter OFF")
     {
-    	change.innerHTML = "Filter ON";
+      change.innerHTML = "Filter ON";
     }
-
-	  
+    
     if (using_filter) {
       unfilter();
     }
-
     switch (emoji) {
       case "burger":
         icon_name = "burger.png";
         break;
-
       case "book":
         icon_name = "book.png";
         break;
-
       case "running":
         icon_name = "running.png";
         break;
-
       case "gym":
         icon_name = "gym.png";
         break;
-
       case "sleep":
         icon_name = "sleep.png";
         break;
-
       case "music":
         icon_name = "music.png";
         break;
-
       default:
         icon_name = "ERROR";
         console.log("Error in filtering");
         // should throw error here
     }
-
     var filteredEmojis = emoji_array.filter(function(marker){
       return marker.icon != icon_name;
     });
-
     // set all other emojis to not visible
     for (var i = 0; i < filteredEmojis.length; i++) {
       filteredEmojis[i].setVisible(false);
     }
     using_filter = true;
   }
-
   /**
    * Set up a Firebase with deletion on clicks older than expirySeconds
    * @param {!google.maps.visualization.HeatmapLayer} heatmap The heatmap to
    * which points are added from Firebase.
    */
   function initFirebase(heatmap) {
-
     // 10 minutes before current time.
     var startTime = new Date().getTime() - (60 * 10080 * 1000);
-
     // Reference to the clicks in Firebase.
     var clicks = firebase.child('clicks');
-
     // Listener for when a click is added.
     clicks.orderByChild('timestamp').startAt(startTime).on('child_added',
       function(snapshot) {
-
         // Get that click from firebase.
         var newPosition = snapshot.val();
         var point = new google.maps.LatLng(newPosition.lat, newPosition.lng);
         var elapsed = new Date().getTime() - newPosition.timestamp;
-
         // Add the point to  the heatmap.
         heatmap.getData().push(point);
-
         // Requests entries older than expiry time (10 minutes).
         var expirySeconds = Math.max(60 * 10080 * 1000 - elapsed, 0);
         // Set client timeout to remove the point after a certain time.
@@ -319,7 +338,6 @@
         }, expirySeconds);
       }
     );
-
     // Remove old data from the heatmap when a point is removed from firebase.
     clicks.on('child_removed', function(snapshot, prevChildKey) {
       var heatmapData = heatmap.getData();
@@ -331,7 +349,6 @@
       heatmapData.removeAt(i);
     });
   }
-
   /**
    * Updates the last_message/ path with the current timestamp.
    * @param {function(Date)} addClick After the last message timestamp has been updated,
@@ -341,9 +358,7 @@
   function getTimestamp(addClick) {
     // Reference to location for saving the last click time.
     var ref = firebase.child('last_message/' + data.sender);
-
     ref.onDisconnect().remove(); // Delete reference from firebase on disconnect.
-
     // Set value to timestamp.
     ref.set(Firebase.ServerValue.TIMESTAMP, function(err) {
       if (err) { // Write to last message was unsuccessful.
@@ -357,7 +372,6 @@
       }
     });
   }
-
   /**
    * Adds a click to firebase.
    * @param {Object} data The data to be added to firebase.
@@ -374,56 +388,45 @@
       });
     });
   }
-
   // assign the emoji to "emoji_to_use"
   function markBookEmoji() {
     console.log("Book Emoji was clicked on");
     emoji_to_use = 'book.png';
   }
-
   function markBurgerEmoji() {
     console.log("Burger Emoji was clicked on");
     emoji_to_use = 'burger.png';
   }
-
   function markRunningEmoji() {
     console.log("Book Emoji was clicked on");
     emoji_to_use = 'running.png';
   }
-
   function markGymEmoji() {
     console.log("Book Emoji was clicked on");
     emoji_to_use = 'gym.png';
   }
-
   function markSleepEmoji() {
     console.log("Book Emoji was clicked on");
     emoji_to_use = 'sleep.png';
   }
-
   function markMusicEmoji() {
     console.log("Book Emoji was clicked on");
     emoji_to_use = 'music.png';
-
   }
   var working = firebase.child('clicks');
   working.on('value', gotData, errData);
-	  
+    
   function deleteEmoji() {
      working.once('value', (snapshot) => {
       const ourData = snapshot.val();
       console.log('You received some data!', ourData);
       const ourKeys = Object.keys(ourData);
-
       var lastIndex = ourKeys.length - 1;
       var k = ourKeys[lastIndex];
-
       working.child(k).remove();
       emoji_array[lastIndex].setVisible(false);
       emoji_array.pop();
-
     });
-
   }
   // get data from cloud and display on the map
   function gotData(data) {
@@ -434,7 +437,6 @@
     var latitude;
     var longitude;
     var emoji;
-
     var clickData = data.val();
     temp_data = clickData;
     var keys = Object.keys(clickData);
@@ -442,7 +444,6 @@
     temp_key = keys;
     // console.log(keys);
     num_length = keys.length;
-
     for (var i = 0; i < keys.length; i++) {
       var k = keys[i];
       latitude = clickData[k].lat;
@@ -462,13 +463,22 @@
     }
     first_call = false;
   }
-
   function errData(err) {
     console.log('Error!');
     console.log(err);
   }
 
+   introJs().start().oncomplete(function() {
+    introJs().exit();
+  }).onexit(function() {
+    introJs().exit();
+  }).onbeforechange(function(targetElement) {
+    // The rest of the code
+  })
+
   </script>
+
+  <div id = "bottom_half">
   <div class="dropdown" id="Trending_Section">
     <br>
     <button onclick="myFunction()" class="dropbtn" id="toggle">Filter OFF</button>
@@ -477,7 +487,7 @@
     <div id="myDropdown" class="dropdown-content"> <img onclick="filter('book')" src="book.png" /> <img onclick="filter('burger')" src="burger.png" /> <img onclick="filter('running')" src="running.png" /> <img onclick="filter('gym')" src="gym.png" /> <img onclick="filter('music')" src="music.png" /> <img onclick="filter('sleep')" src="sleep.png" /> </div>
   </div>
   <div class="bookEmoji" id="bookEmoji"> <img onclick="markBookEmoji()" src="book.png" /> <img onclick="markBurgerEmoji()" src="burger.png" /> <img onclick="markRunningEmoji()" src="running.png" /> <img onclick="markGymEmoji()" src="gym.png" /> <img onclick="markMusicEmoji()" src="music.png" /> <img onclick="markSleepEmoji()" src="sleep.png" /> </div>
-  <div>
+  <div id="deletebutton">
     <button onclick="deleteEmoji()">Delete Most Recent Emoji</button>
   </div>
   <script>
@@ -485,41 +495,39 @@
   /* When the user clicks on the button,
   toggle between hiding and showing the dropdown content */
   function myFunction() {
-	var change = document.getElementById("toggle");
+  var change = document.getElementById("toggle");
     if (change.innerHTML == "Filter ON")
     {
-    	change.innerHTML = "Filter OFF";
-    	unfilter();
-	}
-
-	else{
-		
-    document.getElementById("myDropdown").classList.toggle("show");
-	}
+      change.innerHTML = "Filter OFF";
+      unfilter();
+  }
+  else{
     
-	
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+    
+  
   }
   // function that hide the emoji and show the hitmap only
   function hide_emoji(){
-	var change = document.getElementById("hide");
+  var change = document.getElementById("hide");
     if (change.innerHTML == "Emoji ON")
     {
-    	change.innerHTML = "Emoji OFF";
-		for (var i = 0; i < emoji_array.length; i++) {
-      		emoji_array[i].setVisible(false);
-    	}
-	}
-	else{
-		change.innerHTML = "Emoji ON";
-		for (var i = 0; i < emoji_array.length; i++) {
-      		emoji_array[i].setVisible(true);
-    	}
-	}
+      change.innerHTML = "Emoji OFF";
+    for (var i = 0; i < emoji_array.length; i++) {
+          emoji_array[i].setVisible(false);
+      }
+  }
+  else{
+    change.innerHTML = "Emoji ON";
+    for (var i = 0; i < emoji_array.length; i++) {
+          emoji_array[i].setVisible(true);
+      }
+  }
   }
   // Close the dropdown if the user clicks outside of it
   window.onclick = function(event) {
     if (!event.target.matches('.dropbtn')) {
-
       var dropdowns = document.getElementsByClassName("dropdown-content");
       var i;
       for (i = 0; i < dropdowns.length; i++) {
@@ -532,6 +540,8 @@
   }
   </script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqsnk4ZFV7jtlCZ-l161iBo7BpQFJueA8&libraries=visualization&callback=initMap" async defer></script>
+
+</div>
 </body>
 
 </html>

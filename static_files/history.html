@@ -7,18 +7,46 @@
   <title>History</title>
   <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
   <script src="jquery-3.3.1.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500" rel="stylesheet">
  
+  <style>
+
+  body {
+	background-color: #9BDAEB;
+	font-family: 'Ubuntu', sans-serif;
+  }
+
+  #home {
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+
+  #bottom_half {
+	background-color: #BEE5F1;
+  }
+
+
+
+
+
+  </style>
 
 </head>
 <body>
-	<a href = "index.html">
-    <button class="history">Home</button>
-    </a>
 
-
-    <h1>Coordinate History</h1>
   
+  	<a href = "index.html">
+      <button id="home" class="history">Home</button>
+      </a>
 
+      
+      <h1>Coordinate History</h1>
+  
+  
+  <div id="bottom_half">
   <div id="test"></div>
 
  <script type="text/javascript">
@@ -64,9 +92,10 @@
   }
 
 
+
 </script>
 
-
+</div>
 
 
 
