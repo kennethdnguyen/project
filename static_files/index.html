@@ -49,6 +49,10 @@
     position: absolute;
     right: 0;
   }
+  .hint {
+    position: absolute;
+    left: 0;
+  }
   .dropbtn {
     background-color: #52B456;
 	border-radius: 5px;
@@ -143,18 +147,46 @@
 <body>
   <div id = "first_half">
   <div id="top">
+    <button class="hint" onclick="startIntro()">Hints</button>
     <a href="history.html">
-      <button class="history">Coordinate History</button>
+      <button class="history" data-intro='Welcome to our mobile web app!' data-step='6'>Coordinate History</button>
     </a>
   </div>
 
-  <h1 data-intro="Welcome to our mobile web app!" data-step="1">Map It Up</h1>
+  <h1 data-intro='Welcome to our mobile web app!' data-step='1'>Map It Up</h1>
   <h3 id="short">Discover New Hot Spots</h3>
   <h3></h3>
 
   </div>
-  <div id="map" data-intro="This is a collaborative map where you can mark locations with emojis." data-step="2"></div>
-  <!-- <div id="work"></div> -->
+  <div id="map" data-intro='This is a collaborative map for you to mark and save locations with emojis' data-step='2'></div>
+  
+   <div id = "bottom_half">
+  <div class="dropdown" id="Trending_Section" data-intro='Welcome to our mobile web app!' data-step='3'>
+    <br>
+    <button onclick="myFunction()" class="dropbtn" id="toggle">Filter OFF</button>
+    <button onclick="hide_emoji()" class="dropbtn" id="hide">Emoji ON</button>
+
+    <div id="myDropdown" class="dropdown-content"> 
+      <img onclick="filter('book')" src="book.png" /> 
+      <img onclick="filter('burger')" src="burger.png" /> 
+      <img onclick="filter('running')" src="running.png" /> 
+      <img onclick="filter('gym')" src="gym.png" /> 
+      <img onclick="filter('music')" src="music.png" /> 
+      <img onclick="filter('sleep')" src="sleep.png" /> 
+    </div>
+  </div>
+  <div class="bookEmoji" id="bookEmoji" data-intro='Welcome to our mobile web app!' data-step='4'> 
+    <img onclick="markBookEmoji()" src="book.png" /> 
+    <img onclick="markBurgerEmoji()" src="burger.png" /> 
+    <img onclick="markRunningEmoji()" src="running.png" /> 
+    <img onclick="markGymEmoji()" src="gym.png" /> 
+    <img onclick="markMusicEmoji()" src="music.png" /> 
+    <img onclick="markSleepEmoji()" src="sleep.png" /> 
+  </div>
+  <div id="deletebutton" data-intro='Welcome to our mobile web app!' data-step='5'>
+    <button onclick="deleteEmoji()">Delete Most Recent Emoji</button>
+  </div>
+</div>
   <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
   <script>
   /**
@@ -219,6 +251,7 @@
   var temp_key;
   // main array for holding all emojis
   var emoji_array = [];
+  var redo_control = false;
   /**
    * Creates a map object with a click listener and a heatmap.
    */
@@ -260,6 +293,7 @@
     console.log("Placing marker here");
     emoji_array.push(marker);
     marker.setVisible(true);
+	
   }
   function unfilter() {
    for (var i = 0; i < emoji_array.length; i++) {
@@ -468,30 +502,7 @@
     console.log(err);
   }
 
-   introJs().start().oncomplete(function() {
-    introJs().exit();
-  }).onexit(function() {
-    introJs().exit();
-  }).onbeforechange(function(targetElement) {
-    // The rest of the code
-  })
-
-  </script>
-
-  <div id = "bottom_half">
-  <div class="dropdown" id="Trending_Section">
-    <br>
-    <button onclick="myFunction()" class="dropbtn" id="toggle">Filter OFF</button>
-    <button onclick="hide_emoji()" class="dropbtn" id="hide">Emoji ON</button>
-
-    <div id="myDropdown" class="dropdown-content"> <img onclick="filter('book')" src="book.png" /> <img onclick="filter('burger')" src="burger.png" /> <img onclick="filter('running')" src="running.png" /> <img onclick="filter('gym')" src="gym.png" /> <img onclick="filter('music')" src="music.png" /> <img onclick="filter('sleep')" src="sleep.png" /> </div>
-  </div>
-  <div class="bookEmoji" id="bookEmoji"> <img onclick="markBookEmoji()" src="book.png" /> <img onclick="markBurgerEmoji()" src="burger.png" /> <img onclick="markRunningEmoji()" src="running.png" /> <img onclick="markGymEmoji()" src="gym.png" /> <img onclick="markMusicEmoji()" src="music.png" /> <img onclick="markSleepEmoji()" src="sleep.png" /> </div>
-  <div id="deletebutton">
-    <button onclick="deleteEmoji()">Delete Most Recent Emoji</button>
-  </div>
-  <script>
-  
+ 
   /* When the user clicks on the button,
   toggle between hiding and showing the dropdown content */
   function myFunction() {
@@ -538,10 +549,19 @@
       }
     }
   }
+
+function startIntro() {
+     introJs().start().oncomplete(function() {
+    introJs().exit();
+  }).onexit(function() {
+    introJs().exit();
+  })
+}
   </script>
+
+ 
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqsnk4ZFV7jtlCZ-l161iBo7BpQFJueA8&libraries=visualization&callback=initMap" async defer></script>
 
-</div>
 </body>
 
 </html>
