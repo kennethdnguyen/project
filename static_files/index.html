@@ -291,9 +291,6 @@
       placeMarker(e.latLng, map);
       data.lat = e.latLng.lat();
       data.lng = e.latLng.lng();
-	  if(emoji_to_use == 'none'){
-		  emoji_to_use = "ERROR.png";
-	  }
       data.picture = emoji_to_use;
       addToFirebase(data);
     });
@@ -317,7 +314,6 @@
     emoji_array.push(marker);
     marker.setVisible(true);
 	undo_control = true;
-	emoji_to_use = 'none';
 	if(emoji_to_use == 'none'){ 
     	gmarkers.push(marker);
 		removeMarkers;
@@ -371,7 +367,7 @@
         icon_name = "music.png";
         break;
       default:
-        icon_name = "ERROR.png";
+        icon_name = "ERROR";
         console.log("Error in filtering");
         // should throw error here
     }
@@ -530,7 +526,6 @@
       latitude = clickData[k].lat;
       longitude = clickData[k].lng;
       emoji = clickData[k].picture;
-	  if(emoji == 'ERROR.png'){emoji = 'none'}
       //console.log(latitude, longitude);
       var location_to_mark = new google.maps.LatLng(latitude, longitude);
       emoji_marker = new google.maps.Marker({
