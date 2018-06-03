@@ -46,12 +46,18 @@
 	padding-top: 0px;
   }
   .history {
-    position: absolute;
-    right: 0;
+	position: absolute;
+	right: 0;
+	width: 25%;
+	padding-top: 5px;
+	padding-bottom: 5px;
   }
   .hint {
-    position: absolute;
-    left: 0;
+	position: absolute;
+	left: 0;
+	width: 25%;
+	padding-top: 5px;
+	padding-bottom: 5px;
   }
   .dropbtn {
     background-color: #52B456;
@@ -147,21 +153,21 @@
 <body>
   <div id = "first_half">
   <div id="top">
-    <button class="hint" onclick="startIntro()">Hints</button>
+    <button class="hint" onclick="startIntro()">Tutorial</button>
     <a href="history.html">
-      <button class="history" data-intro='Welcome to our mobile web app!' data-step='6'>Coordinate History</button>
+      <button class="history" data-intro="See the emoji in a list form here" data-step="6">History</button>
     </a>
   </div>
 
-  <h1 data-intro='Welcome to our mobile web app!' data-step='1'>Map It Up</h1>
+  <h1 data-intro="Welcome to our mobile web app!" data-step="1">Map It Up</h1>
   <h3 id="short">Discover New Hot Spots</h3>
   <h3></h3>
 
   </div>
-  <div id="map" data-intro='This is a collaborative map for you to mark and save locations with emojis' data-step='2'></div>
+  <div id="map" data-intro="This is a collaborative map for you to mark and save locations with emojis" data-step="2"></div>
   
    <div id = "bottom_half">
-  <div class="dropdown" id="Trending_Section" data-intro='Welcome to our mobile web app!' data-step='3'>
+  <div class="dropdown" id="Trending_Section" data-intro="Use the Filter button to filter emojis on map; and use the Emoji ON/Off button to hide emojis" data-step="3">
     <br>
     <button onclick="myFunction()" class="dropbtn" id="toggle">Filter OFF</button>
     <button onclick="hide_emoji()" class="dropbtn" id="hide">Emoji ON</button>
@@ -175,7 +181,7 @@
       <img onclick="filter('sleep')" src="sleep.png" /> 
     </div>
   </div>
-  <div class="bookEmoji" id="bookEmoji" data-intro='Welcome to our mobile web app!' data-step='4'> 
+  <div class="bookEmoji" id="bookEmoji" data-intro="Add these emojis to the map!" data-step="4"> 
     <img onclick="markBookEmoji()" src="book.png" /> 
     <img onclick="markBurgerEmoji()" src="burger.png" /> 
     <img onclick="markRunningEmoji()" src="running.png" /> 
@@ -183,7 +189,7 @@
     <img onclick="markMusicEmoji()" src="music.png" /> 
     <img onclick="markSleepEmoji()" src="sleep.png" /> 
   </div>
-  <div id="deletebutton" data-intro='Welcome to our mobile web app!' data-step='5'>
+  <div id="deletebutton" data-intro="Delete your marker if you mismarked it" data-step="5">
     <button onclick="deleteEmoji()">Delete Most Recent Emoji</button>
   </div>
 </div>
@@ -251,7 +257,7 @@
   var temp_key;
   // main array for holding all emojis
   var emoji_array = [];
-  var redo_control = false;
+  var undo_control = false;
   /**
    * Creates a map object with a click listener and a heatmap.
    */
@@ -293,7 +299,7 @@
     console.log("Placing marker here");
     emoji_array.push(marker);
     marker.setVisible(true);
-	
+	undo_control = true;
   }
   function unfilter() {
    for (var i = 0; i < emoji_array.length; i++) {
@@ -451,6 +457,7 @@
   working.on('value', gotData, errData);
     
   function deleteEmoji() {
+	 if(undo_control == true){
      working.once('value', (snapshot) => {
       const ourData = snapshot.val();
       console.log('You received some data!', ourData);
@@ -461,6 +468,9 @@
       emoji_array[lastIndex].setVisible(false);
       emoji_array.pop();
     });
+	undo_control = false;
+	}
+	
   }
   // get data from cloud and display on the map
   function gotData(data) {
