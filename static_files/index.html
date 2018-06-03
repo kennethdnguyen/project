@@ -60,9 +60,9 @@
 	padding-bottom: 5px;
   }
   .dropbtn {
-    background-color: #52B456;
+    background-color: #C0C0C0;
 	border-radius: 5px;
-    color: white;
+    color: black;
     padding: 12px;
     font-size: 16px;
     border: none;
@@ -72,7 +72,7 @@
   }
   .dropbtn:hover,
   .dropbtn:focus {
-	background-color: #52B456;
+	background-color: #C0C0C0;
   }
   .dropdown {
     position: relative;
@@ -180,7 +180,7 @@
   <div class="dropdown" id="Trending_Section" data-intro="Use the Filter button to filter emojis on map; and use the Emoji ON/Off button to hide emojis" data-step="3">
     <br>
     <button onclick="myFunction()" class="dropbtn" id="toggle">Filter OFF</button>
-    <button onclick="hide_emoji()" class="dropbtn" id="hide">Emoji ON</button>
+    <button onclick="hide_emoji()" class="dropbtn_hide" id="hide">Emoji ON</button>
 
     <div id="myDropdown" class="dropdown-content"> 
       <img onclick="filter('book')" src="book.png" /> 
@@ -200,7 +200,7 @@
     <img onclick="markSleepEmoji()" src="sleep.png" /> 
   </div>
   <div id="deletebutton" data-intro="Delete your marker if you mismarked it" data-step="5">
-    <button onclick="deleteEmoji()">Delete Most Recent Emoji</button>
+    <button onclick="deleteEmoji()">Delete the Most Recent Emoji</button>
   </div>
 </div>
   <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
@@ -257,7 +257,8 @@
       onAuthSuccess();
     }, { remember: 'sessionOnly' }); // Users will get a new id for every session.
   }
-  var emoji_to_use;
+  var gmarkers = [];
+  var emoji_to_use = 'none';
   var map;
   var emoji_marker;
   var num_length;
@@ -268,6 +269,8 @@
   // main array for holding all emojis
   var emoji_array = [];
   var undo_control = false;
+  var drop_property = document.getElementById("toggle");
+
   /**
    * Creates a map object with a click listener and a heatmap.
    */
@@ -288,6 +291,9 @@
       placeMarker(e.latLng, map);
       data.lat = e.latLng.lat();
       data.lng = e.latLng.lng();
+	  if(emoji_to_use == 'none'){
+		  emoji_to_use = "ERROR.png";
+	  }
       data.picture = emoji_to_use;
       addToFirebase(data);
     });
@@ -300,24 +306,41 @@
     initAuthentication(initFirebase.bind(undefined, heatmap));
   }
   function placeMarker(latLng, map) {
-    // console.log(emoji_to_use);
+    console.log(emoji_to_use);
     var marker = new google.maps.Marker({
       position: latLng,
       map: map,
       icon: emoji_to_use
     });
+	
     console.log("Placing marker here");
     emoji_array.push(marker);
     marker.setVisible(true);
 	undo_control = true;
+	emoji_to_use = 'none';
+	if(emoji_to_use == 'none'){ 
+    	gmarkers.push(marker);
+		removeMarkers;
+	}
   }
+  function removeMarkers(){
+    for(i=0; i<gmarkers.length; i++){
+        gmarkers[i].setMap(null);
+    }
+}
   function unfilter() {
+
    for (var i = 0; i < emoji_array.length; i++) {
       emoji_array[i].setVisible(true);
     }
       using_filter = false;
+	  drop_property.style.backgroundColor = "#C0C0C0";
+	  drop_property.style.color = "black";
+
   }
   function filter(emoji) {
+	drop_property.style.backgroundColor = "#52B456";
+	drop_property.style.color = "white";
   var change = document.getElementById("toggle");
     if (change.innerHTML == "Filter OFF")
     {
@@ -326,6 +349,7 @@
     
     if (using_filter) {
       unfilter();
+
     }
     switch (emoji) {
       case "burger":
@@ -347,7 +371,7 @@
         icon_name = "music.png";
         break;
       default:
-        icon_name = "ERROR";
+        icon_name = "ERROR.png";
         console.log("Error in filtering");
         // should throw error here
     }
@@ -506,6 +530,7 @@
       latitude = clickData[k].lat;
       longitude = clickData[k].lng;
       emoji = clickData[k].picture;
+	  if(emoji == 'ERROR.png'){emoji = 'none'}
       //console.log(latitude, longitude);
       var location_to_mark = new google.maps.LatLng(latitude, longitude);
       emoji_marker = new google.maps.Marker({
@@ -531,12 +556,12 @@
   function myFunction() {
   var change = document.getElementById("toggle");
     if (change.innerHTML == "Filter ON")
-    {
-      change.innerHTML = "Filter OFF";
-      unfilter();
+    { 
+       change.innerHTML = "Filter OFF";
+      unfilter()
   }
-  else{
-    
+  else{ 
+ 	
     document.getElementById("myDropdown").classList.toggle("show");
   }
     
