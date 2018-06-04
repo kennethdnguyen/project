@@ -9,8 +9,6 @@ const fakeDatabase = {
   'Study': {name: 'Study', locations: 'Biomedical Library, Geisel Library'}
 };
 
-
-
 app.get('/:hashtags', (req, res) => {
   const nameToLookup = req.params.hashtags; // matches any of the hashtags from above
   const val = fakeDatabase[nameToLookup];
