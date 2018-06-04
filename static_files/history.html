@@ -8,6 +8,7 @@
         <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
         <script src="jquery-3.3.1.min.js"></script>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
         <!-- styling of the web page -->
         <style>
             body {
@@ -151,7 +152,7 @@
                 console.log("num is" + num);
                 console.log(len);
                 var x = street;
-                // console.log(num);
+                // display the address and the emoji that works with the emoji. 
                 $('#test').append("<li>Address: " + x + "</li>" + "<img src=" + emojiArr[num] + ">" + "<hr>");
                 if (num == len - 2) {
                     $('#loading').hide();
