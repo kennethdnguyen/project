@@ -15,3 +15,5 @@ Jackie Chen
   index.html - The single file contains the css styling for the homepage. It also contains the javascript code as well for the functionalities on the first page. The javascript code in this file is used for the intro.js tutorial. The javascript code also implements saving the emojis on the map to firebase as well as displaying them out again, with a heatmap. Additionally, it implements the filtering functionality, turning the emojis on or off to show the heatmap, and an undo functionality to delete an emoji off the map.
   
   history.html - This file contains the css styling and the javascript code for the history page. The javascript code included in here uses the google geocoding api to convert all the saved coordinates on firebase into addresses and displays them out with their corresponding emojis. 
+  
+  Link to the Demo on Youtube --> https://www.youtube.com/watch?v=FSLl7Lm2ILM&feature=youtu.be
