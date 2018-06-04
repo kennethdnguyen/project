@@ -1,7 +1,11 @@
 Team Track2O
+
 Kenneth Nguyen
+
 Pardeep Singh
+
 Zhaoshuo Bi
+
 Jackie Chen
 
   Kenneth contributed to saving the user data to firebase and implementing the intro.js tutorial. Zhaoshuo contributed to filtering the emojis, turning the emojis on or off and the undo button to delete an emoji. Pardeep contributed to the CSS and styling of the app as well as taking the data from firebase and displaying it. Jackie contributed to the history page by using the google geocoding api to display the addresses of the marked locations on the map.
