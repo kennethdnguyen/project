@@ -1,103 +1,172 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,
   initial-scale=1.0">
-  <title>History</title>
-  <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
-  <script src="jquery-3.3.1.min.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500" rel="stylesheet">
- 
-  <style>
+    <title>History</title>
+    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+    <script src="jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
-  body {
-	background-color: #9BDAEB;
-	font-family: 'Ubuntu', sans-serif;
-  }
+    <style>
+        body {
+        background-color: #9BDAEB;
+        font-family: 'Ubuntu', sans-serif;
+        }
 
-  #home {
-    font-size: 18px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-  }
+        #home {
+        font-size: 18px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        }
 
-  #bottom_half {
-	background-color: #BEE5F1;
-  }
+        #bottom_half {
+        background-color: #BEE5F1;
+        }
 
+        #top button {
+        background-color: #4CAF50;
+        color: white;
+        border-radius: 10px;
 
+        display: inline-block;
+        font-size: 12px;
+        cursor: pointer;
+
+        width: 25%;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        }
 
 
 
   </style>
-
 </head>
+
 <body>
+    <div id="top">
+    <a href="index.html">
+        <button class="history">Home</button>
+    </a>
+    <div>
+    <h1>Coordinate History</h1>
 
-  
-  	<a href = "index.html">
-      <button id="home" class="history">Home</button>
-      </a>
+    <div id="loading">
+        <img id="loading-image" src="ajax-loader.gif" alt="Loading..." />
+        <p>Loading saved addresses...</p>
+    </div>
 
-      
-      <h1>Coordinate History</h1>
-  
-  
-  <div id="bottom_half">
-  <div id="test"></div>
 
- <script type="text/javascript">
- var lat;
- var lng;
- var photo;
-   var config = {
-    apiKey: "AIzaSyCqsnk4ZFV7jtlCZ-l161iBo7BpQFJueA8",
-    authDomain: "cogs121-4b110.firebaseapp.com",
-    databaseURL: "https://cogs121-4b110.firebaseio.com",
-    projectId: "cogs121-4b110",
-    storageBucket: "cogs121-4b110.appspot.com",
-    messagingSenderId: "398783944630"
-  };
-  firebase.initializeApp(config);
-  var database;
-  database = firebase.database();
+    <div id="test"></div>
+    <script type="text/javascript">
+    var photo;
+    var real_address;
+    var latitude;
+    var longitude;
+    var index;
+    var emojiArr = [];
+    var len;
 
-  var ref = database.ref('clicks');
-  ref.on('value', gotData, errData);
+    var latlng;
+    var config = {
+        apiKey: "AIzaSyCqsnk4ZFV7jtlCZ-l161iBo7BpQFJueA8",
+        authDomain: "cogs121-4b110.firebaseapp.com",
+        databaseURL: "https://cogs121-4b110.firebaseio.com",
+        projectId: "cogs121-4b110",
+        storageBucket: "cogs121-4b110.appspot.com",
+        messagingSenderId: "398783944630"
+    };
+    firebase.initializeApp(config);
+    var database;
+    database = firebase.database();
 
-  
+    var ref = database.ref('clicks');
+    ref.on('value', gotData, errData);
+    var geocoder = new google.maps.Geocoder();
 
-  function gotData(data) {
-    var clickData = data.val();
-    var keys = Object.keys(clickData);
-
-    for (var i = 0; i < keys.length; i++) {
-      var k = keys[i];
-      latitude = clickData[k].lat;
-      longitude = clickData[k].lng;
-      photo = clickData[k].picture;
-      console.log(photo);
-      
-      $('#test').append("<li>Latitude: " + latitude + " Longitude: " + longitude + "</li>" + "<img src=" + photo + ">" + "<hr>");
+    function sleep(milliseconds) {
+      var start = new Date().getTime();
+      for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+          break;
+        }
+      }
     }
-    
-  }
-
-  function errData(err) {
-    console.log('Error!');
-    console.log(err);
-  }
 
 
+    function gotData(data) {
+        var clickData = data.val();
+        var keys = Object.keys(clickData);
+        len = keys.length;
+        console.log(len);
 
-</script>
+        console.log("printing keys");
+        console.log(keys);
 
-</div>
+        var y = 0;
+
+        for (index = 0; index < keys.length; index++) {
+        // var index = 0;
+        // while (index < keys.length) {
+        // for (index = 0; index < 1; index++) {
+            if (index >= 5) {
+              sleep(2000);
+            }
+
+            console.log(index);
+            var k = keys[index];
+            latitude = clickData[k].lat;
+            longitude = clickData[k].lng;
+            photo = clickData[k].picture;
+            emojiArr.push(photo);
+
+            var latLng = {lat: clickData[k].lat, lng: clickData[k].lng};
+
+            geocoder.geocode({'location': latLng}, function(results, status) {
+                if (status === 'OK') {
+                  if (results[0]) {
+                    addr = results[0].formatted_address;
+
+                    console.log(addr);
+                    testFunction(addr, y);
+                    y++;
+                  } else {
+                    console.log('No results found');
+                  }
+                } else {
+                  console.log('Geocoder failed due to: ' + status);
+                  // index--;
+                  // sleep(2000);
+                }
+              });
+        }
+    }
+
+    function errData(err) {
+        console.log('Error!');
+        console.log(err);
+    }
+
+    function testFunction(street, num) {
+        console.log("num is" + num);
+        console.log(len);
+        var x = street;
+        // console.log(num);
+        $('#test').append("<li>Address: " + x + "</li>" + "<img src=" + emojiArr[num] + ">" + "<hr>");
+        if (num == len - 2) {
+            $('#loading').hide();
+        }
+
+    }
 
 
 
-  </body>
-  </html>
+  
+    </script>
+</body>
+
+</html>
