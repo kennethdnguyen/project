@@ -1,0 +1,28 @@
+body {
+        background-color: #9BDAEB;
+        font-family: 'Ubuntu', sans-serif;
+     }
+            
+#home {
+        font-size: 18px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+      }
+            
+#bottom_half {
+                background-color: #BEE5F1;
+             }
+            
+#top button {
+                background-color: #4CAF50;
+                color: white;
+                border-radius: 10px;
+                display: inline-block;
+                font-size: 12px;
+                cursor: pointer;
+                width: 25%;
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
