@@ -22,8 +22,7 @@
             // the reference of our data on the cloud
             var ref = database.ref('clicks');
             ref.on('value', gotData, errData);
-            // use geocoder for reverse from latitude and longitude to real address
-            var geocoder = new google.maps.Geocoder();
+           
             // a hanging function to make sure geocode works
             function sleep(milliseconds) {
               var start = new Date().getTime();
@@ -33,6 +32,8 @@
                 }
               }
             }
+
+
             // get data from the firebase
             function gotData(data) {
                 var clickData = data.val();
@@ -43,8 +44,12 @@
                 console.log("printing keys");
                 console.log(keys);
                 var y = 0;
+                 // use geocoder for reverse from latitude and longitude to real address
+                var geocoder = new google.maps.Geocoder();
+                
                 // use a loop to convert the data
                 for (index = 0; index < keys.length; index++) {
+                    
                 // var index = 0;
                 // while (index < keys.length) {
                 // for (index = 0; index < 1; index++) {
@@ -75,8 +80,7 @@
                         } 
                         else {
                           console.log('Geocoder failed due to: ' + status);
-                          // index--;
-                          // sleep(2000);
+                          sleep(2000);
                         }
                     });
                 }
